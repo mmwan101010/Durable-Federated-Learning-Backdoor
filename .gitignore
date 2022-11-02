@@ -3,6 +3,9 @@
 /data/
 *.pkl
 
+# wandb
+wandb/
+
 # neurotoxin saved folder
 /*saved*/
 *saved*/
