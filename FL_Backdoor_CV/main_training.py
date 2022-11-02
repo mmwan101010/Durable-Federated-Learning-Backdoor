@@ -341,6 +341,14 @@ if __name__ == '__main__':
                 print('test poison acc (after fedavg)', epoch_acc_p)
                 print('train poison loss (after fedavg)', epoch_loss_p_train)
                 print('train poison acc (after fedavg)', epoch_acc_p_train)
+                
+                wandb.log({
+                           'test poison loss (after fedavg)': epoch_loss_p,
+                           'test poison acc (after fedavg)': epoch_acc_p,
+                           'train poison loss (after fedavg)': epoch_loss_p_train,
+                           'train poison acc (after fedavg)': epoch_acc_p_train,
+                           'epoch': epoch
+                           })
 
             else:
                 raise ValueError("Unknown model")
