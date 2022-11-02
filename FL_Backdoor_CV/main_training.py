@@ -12,6 +12,7 @@ import torch.optim as optim
 from torch.autograd import Variable
 import math
 import json
+import wandb
 
 import os
 from utils.sendEmail import sendEmail
@@ -256,7 +257,6 @@ if __name__ == '__main__':
     dataset_name = helper.params['dataset']
     model_name = helper.params['model']
     bengin_lr = helper.params['lr']
-    wandb = None
     
     TLr = helper.params['target_lr']
     if args.is_poison:
@@ -276,7 +276,7 @@ if __name__ == '__main__':
             else:
                 Method_name = f'Neurotoxin_GradMaskRation{args.gradmask_ratio}'
             wandb_exper_name = f"Local_backdoor_cv_{dataset_name}_{model_name}_snorm{args.s_norm}_{Method_name}_without_attack_Lr{bengin_lr}_TLr{TLr}_SE{args.start_epoch}_noniid_{non_iid_diralpha}"
-
+    # wandb = None # if do not use wandb,should be set to None
     wandb.init(name=wandb_exper_name, entity='imomoe', project=f"backdoor_CV_{dataset_name}_{model_name}_update", config=helper.params)
     wandb.watch_called = False # Re-run the model without restarting the runtime, unnecessary after our next release
     
