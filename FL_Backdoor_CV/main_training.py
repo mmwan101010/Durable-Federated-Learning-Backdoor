@@ -313,13 +313,13 @@ if __name__ == '__main__':
         if helper.params['is_poison']:
             helper.params['save_on_epochs'] = list(range(helper.params['start_epoch'], helper.params['end_epoch'], 10))
             if epoch + 1 in helper.params['save_on_epochs']:
-                save_model(file_name=f'Backdoor_model_{dataset_name}_{model_name}_maskRatio{helper.params["gradmask_ratio"]}_Snorm_{args.s_norm}_checkpoint', helper=helper, epoch=epoch, new_folder_name=f"{dataset_name}_central_model/Backdoor_saved_models_update1_noniid_{non_iid_diralpha}_{dataset_name}_EC{edge_case_v}_EE{EE}/maskratio{helper.params['gradmask_ratio']}")
+                save_model(file_name=f'Backdoor_model_{dataset_name}_{model_name}_maskRatio{helper.params["gradmask_ratio"]}_Snorm_{args.s_norm}_checkpoint', helper=helper, epoch=epoch, new_folder_name=f"{dataset_name}_central_saved_model/Backdoor_saved_models_update1_noniid_{non_iid_diralpha}_{dataset_name}_EC{edge_case_v}_EE{EE}/maskratio{helper.params['gradmask_ratio']}")
 
         else:
             if epoch in helper.params['save_on_epochs']:
                 if helper.params['emnist_style'] == 'byclass' and helper.params['dataset'] == 'emnist':
                     dataset_name = 'emnist_byclass'
-                save_model(file_name=f'{dataset_name}_{model_name}_Snorm_{args.s_norm}_checkpoint', helper=helper, epoch=epoch, new_folder_name=f"{dataset_name}_no_posion_model/saved_models_update1_noniid_{non_iid_diralpha}_{dataset_name}_EC{edge_case_v}_EE{EE}")
+                save_model(file_name=f'{dataset_name}_{model_name}_Snorm_{args.s_norm}_checkpoint', helper=helper, epoch=epoch, new_folder_name=f"{dataset_name}_no_posion_saved_model/saved_models_update1_noniid_{non_iid_diralpha}_{dataset_name}_EC{edge_case_v}_EE{EE}")
 
         if helper.params['is_poison'] or args.resume:
             partipant_sample_size = helper.params['partipant_sample_size']
