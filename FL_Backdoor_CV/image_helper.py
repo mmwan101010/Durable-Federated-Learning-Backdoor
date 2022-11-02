@@ -233,10 +233,10 @@ class ImageHelper(Helper):
                 ])
 
                 trainset = Customize_Dataset(X=saved_southwest_dataset_train, Y=sampled_targets_array_train, transform=transform)
-                self.poisoned_train_loader = DataLoader(dataset = trainset, batch_size = self.params['batch_size'], shuffle = True, num_workers=2)
+                self.poisoned_train_loader = DataLoader(dataset = trainset, batch_size = self.params['batch_size'], shuffle = True, num_workers=1)
 
                 testset = Customize_Dataset(X=saved_southwest_dataset_test, Y=sampled_targets_array_test, transform=transform)
-                self.poisoned_test_loader = DataLoader(dataset = testset, batch_size = self.params['batch_size'], shuffle = True, num_workers=2)
+                self.poisoned_test_loader = DataLoader(dataset = testset, batch_size = self.params['batch_size'], shuffle = True, num_workers=1)
 
                 return self.poisoned_train_loader
 
@@ -286,8 +286,8 @@ class ImageHelper(Helper):
                 print(images_seven.size(),labels_seven.size())
    
 
-                self.poisoned_train_loader = DataLoader(dataset = ardis_dataset, batch_size = self.params['batch_size'], shuffle = True, num_workers=2)
-                self.poisoned_test_loader = DataLoader(dataset = ardis_test_dataset, batch_size = self.params['test_batch_size'], shuffle = True, num_workers=2)
+                self.poisoned_train_loader = DataLoader(dataset = ardis_dataset, batch_size = self.params['batch_size'], shuffle = True, num_workers=1)
+                self.poisoned_test_loader = DataLoader(dataset = ardis_test_dataset, batch_size = self.params['test_batch_size'], shuffle = True, num_workers=1)
 
                 return self.poisoned_train_loader
         else:
@@ -337,7 +337,7 @@ class ImageHelper(Helper):
                                            batch_size=self.params['batch_size'],
                                            sampler=torch.utils.data.sampler.SubsetRandomSampler(
                                                indices),
-                                               num_workers=2)
+                                               num_workers=1)
         return train_loader
 
     def get_test(self):
@@ -345,7 +345,7 @@ class ImageHelper(Helper):
         test_loader = torch.utils.data.DataLoader(self.test_dataset,
                                                   batch_size=self.params['test_batch_size'],
                                                   shuffle=False,
-                                                  num_workers=2)
+                                                  num_workers=1)
 
         return test_loader
 
