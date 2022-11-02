@@ -257,6 +257,7 @@ if __name__ == '__main__':
     model_name = helper.params['model']
     bengin_lr = helper.params['lr']
     wandb = None
+    
     TLr = helper.params['target_lr']
     if args.is_poison:
         if args.gradmask_ratio == 1:
@@ -276,9 +277,11 @@ if __name__ == '__main__':
                 Method_name = f'Neurotoxin_GradMaskRation{args.gradmask_ratio}'
             wandb_exper_name = f"Local_backdoor_cv_{dataset_name}_{model_name}_snorm{args.s_norm}_{Method_name}_without_attack_Lr{bengin_lr}_TLr{TLr}_SE{args.start_epoch}_noniid_{non_iid_diralpha}"
 
-
+    wandb.init(name=wandb_exper_name, entity='imomoe', project=f"backdoor_CV_{dataset_name}_{model_name}_update", config=helper.params)
+    wandb.watch_called = False # Re-run the model without restarting the runtime, unnecessary after our next release
+    
     for epoch in range(helper.params['start_epoch'], helper.params['end_epoch']):
-
+        
         helper.params['min_loss_p'] = 100000.0
         start_time = time.time()
 
