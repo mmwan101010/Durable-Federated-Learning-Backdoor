@@ -1,0 +1,57 @@
+type: text
+task: word_predict
+model: GPT2
+# Batch size for testing
+test_batch_size: 10
+
+# Batch size for training
+batch_size: 10
+
+# Benign learning rate
+lr: 0.00001
+momentum: 0
+decay: 0
+retrain_no_times: 2
+
+dataset: reddit
+# Loss Threshold to stop attack
+stop_threshold: 0.01
+number_of_total_participants: 8000 # 80000
+
+save_on_epochs: []
+report_train_loss: true
+log_interval: 1
+
+# Randomly sample attackers at each round
+random_compromise: false
+
+# Number of total partipants aka. participant pool size. Should be <80000
+participant_population: 8000 # 8000
+
+# Number of partipants sampled at each round to participate FedAvg
+partipant_sample_size: 10
+
+benign_start_index: 1
+
+size_of_secret_dataset: 2048 #1280
+retrain_poison: 10
+min_loss_p: 100000000.0
+target_labeled: []
+number_of_adversaries: 1
+
+sentence_name: None
+# Embedding layer size
+emsize: 200
+# Hidden layer size
+nhid: 200
+# Number of layers
+nlayers: 2 #### nlayers in {2, 4, 8, 16}, try it
+# Dropout Rate
+dropout: 0.2
+tied: true #true
+
+# Max trigger sentence length
+sequence_length: 64 # 64
+
+seed: 1
+data_folder: ../data/reddit
