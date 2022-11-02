@@ -385,6 +385,11 @@ if __name__ == '__main__':
 
         print('benign test loss (after fedavg)', epoch_loss)
         print('benign test acc (after fedavg)', epoch_acc)
+        wandb.log({
+                    'benign test loss (after fedavg)': epoch_loss,
+                    'benign test acc (after fedavg)': epoch_acc,
+                    'epoch': epoch
+                    })
 
 
         benign_acc.append(epoch_acc)
