@@ -358,8 +358,8 @@ if __name__ == '__main__':
 
             save_acc_file(file_name=wandb_exper_name, acc_list=backdoor_acc, new_folder_name=f"saved_result/dataset_{dataset_name}_edge{edge_case_v}/backdoor_acc")
             save_acc_file(file_name=wandb_exper_name, acc_list=backdoor_loss, new_folder_name=f"saved_result/dataset_{dataset_name}_edge{edge_case_v}/backdoor_loss")
-            save_acc_file(file_name=wandb_exper_name, acc_list=backdoor_acc, new_folder_name=f"backup/saved_backdoor_acc_edge_case{args.edge_case}_dataset_{dataset_name}_save_model_EE{EE}")
-            save_acc_file(file_name=wandb_exper_name, acc_list=backdoor_loss, new_folder_name=f"backup/saved_backdoor_loss_edge_case{args.edge_case}_dataset_{dataset_name}_save_model_EE{EE}")
+            # save_acc_file(file_name=wandb_exper_name, acc_list=backdoor_acc, new_folder_name=f"backup/saved_backdoor_acc_edge_case{args.edge_case}_dataset_{dataset_name}_save_model_EE{EE}")
+            # save_acc_file(file_name=wandb_exper_name, acc_list=backdoor_loss, new_folder_name=f"backup/saved_backdoor_loss_edge_case{args.edge_case}_dataset_{dataset_name}_save_model_EE{EE}")
 
             if epoch > helper.params['poison_epochs'][-1] and  epoch_acc_p < 2.0:
                 early_stop_attack = 1
@@ -399,13 +399,13 @@ if __name__ == '__main__':
         if helper.params['is_poison']:
             new_folder_name_loss = f"saved_result/dataset_{dataset_name}_EC{edge_case_v}/benign_loss"
             new_folder_name_acc = f"saved_result/dataset_{dataset_name}_EC{edge_case_v}/benign_acc"
-            new_folder_name_loss = f"backup/saved_benign_loss_edge_case{args.edge_case}_dataset_{dataset_name}_save_model_EE{EE}"
-            new_folder_name_acc = f"backup/saved_benign_acc_edge_case{args.edge_case}_dataset_{dataset_name}_save_model_EE{EE}"
+            # new_folder_name_loss = f"backup/saved_benign_loss_edge_case{args.edge_case}_dataset_{dataset_name}_save_model_EE{EE}"
+            # new_folder_name_acc = f"backup/saved_benign_acc_edge_case{args.edge_case}_dataset_{dataset_name}_save_model_EE{EE}"
         else:
             new_folder_name_loss = f"saved_result/dataset_{dataset_name}_EC{edge_case_v}/benign_loss_without_attack"
             new_folder_name_acc = f"saved_result/dataset_{dataset_name}_EC{edge_case_v}/benign_acc_without_attack"
-            new_folder_name_loss = f"backup/saved_benign_loss_without_attack_1_noniid_{non_iid_diralpha}_dataset_{dataset_name}_save_model_EE{EE}"
-            new_folder_name_acc = f"backup/saved_benign_acc_without_attack_1_noniid_{non_iid_diralpha}_dataset_{dataset_name}_save_model_EE{EE}"
+            # new_folder_name_loss = f"backup/saved_benign_loss_without_attack_1_noniid_{non_iid_diralpha}_dataset_{dataset_name}_save_model_EE{EE}"
+            # new_folder_name_acc = f"backup/saved_benign_acc_without_attack_1_noniid_{non_iid_diralpha}_dataset_{dataset_name}_save_model_EE{EE}"
 
         save_acc_file(file_name=wandb_exper_name, acc_list=benign_loss, new_folder_name=new_folder_name_loss)
         save_acc_file(file_name=wandb_exper_name, acc_list=benign_acc, new_folder_name=new_folder_name_acc)
