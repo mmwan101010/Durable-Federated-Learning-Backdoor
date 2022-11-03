@@ -145,7 +145,12 @@ class Helper:
         return mask_grad_list
 
     def grad_mask_cv(self, helper, model, dataset_clearn, criterion, ratio=0.5):
-        """Generate a gradient mask based on the given dataset"""
+        """Generate a gradient mask based on the given dataset
+            既然在不常用梯度上更新可以使后门保持更久，那么我使用更好的中毒数据来更新梯度就会使梯度更好，从而使后门更好
+            因为中毒数据不仅使后门拥有了这些毒性的特点，又能使后门更耐用
+            再者，虽然我们不选择最大的梯度，但遮罩的比例其实不高，所以对于后门来说，这些梯度也是有用的
+            可能遮罩后毒性的效果会下降，但是必定有部分存在，所以这样的方法是可行的
+        """
         model.train()
         model.zero_grad()
 
