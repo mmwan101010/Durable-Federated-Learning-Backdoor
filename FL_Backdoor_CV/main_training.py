@@ -296,14 +296,15 @@ if __name__ == '__main__':
     # wandb = None # if do not use wandb,should be set to None
     # os.environ["WANDB_API_KEY"] = '417379ea7214f7bf59d9e63187d2afbdf53b39fd'
     # os.environ["WANDB_MODE"] = "offline"
-    wandb_id = wandb.util.generate_id()
-    wandb.init(id=wandb_id, resume="allow", name=wandb_exper_name, entity='imomoe', project=f"backdoor_CV_{dataset_name}_{model_name}_update", config=helper.params)
+    #wandb_id = wandb.util.generate_id()
+    #wandb.init(id=wandb_id, resume="allow", name=wandb_exper_name, entity='imomoe', project=f"backdoor_CV_{dataset_name}_{model_name}_update", config=helper.params)
+    wandb.init(resume="allow", name=wandb_exper_name, entity='imomoe', project=f"backdoor_CV_{dataset_name}_{model_name}_update", config=helper.params)
     wandb.watch_called = False # Re-run the model without restarting the runtime, unnecessary after our next release
     # 上面为这个实验确定了一个ID，在下次如果需要续点的话，需要在下面设定ID才可以从ID相同的实验中续点
     # os.environ["WANDB_RESUME"] = "allow"
     # os.environ["WANDB_RUN_ID"] = wandb.util.generate_id()
-    print("wandbID is : " + wandb_id)
-    save_wandb_id(wandb_exper_name, wandb_id + "\n", )
+    # print("wandbID is : " + wandb_id)
+    # save_wandb_id(wandb_exper_name, wandb_id + "\n", )
     
     
     
