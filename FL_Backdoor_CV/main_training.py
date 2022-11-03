@@ -280,16 +280,16 @@ if __name__ == '__main__':
             Method_name = f'Neurotoxin_GradMaskRation{args.gradmask_ratio}'
 
 
-        wandb_exper_name = f"Local_backdoor_cv_{dataset_name}_{model_name}_snorm{args.s_norm}_{Method_name}_Lr{bengin_lr}_PLr{args.poison_lr}_TLr{TLr}_AttackNum{args.attack_num}_SE{args.start_epoch}_AllLayer{args.aggregate_all_layer}"
+        wandb_exper_name = f"Local_backdoor_cv_{dataset_name}_{model_name}_snorm{args.s_norm}_{Method_name}_Lr{bengin_lr}_PLr{args.poison_lr}_TLr{TLr}_AttackNum{args.attack_num}_EC{args.edge_case}_SE{args.start_epoch}_AllLayer{args.aggregate_all_layer}"
     else:
         non_iid_diralpha = helper.params['dirichlet_alpha']
-        wandb_exper_name = f"Local_backdoor_cv_{dataset_name}_{model_name}_snorm{args.s_norm}_without_attack_Lr{bengin_lr}_TLr{TLr}_SE{args.start_epoch}_noniid_{non_iid_diralpha}"
+        wandb_exper_name = f"Local_backdoor_cv_{dataset_name}_{model_name}_snorm{args.s_norm}_without_attack_Lr{bengin_lr}_TLr{TLr}_EC{args.edge_case}_SE{args.start_epoch}_noniid_{non_iid_diralpha}"
         if args.resume:
             if args.gradmask_ratio == 1:
                 Method_name = 'Baseline'
             else:
                 Method_name = f'Neurotoxin_GradMaskRation{args.gradmask_ratio}'
-            wandb_exper_name = f"Local_backdoor_cv_{dataset_name}_{model_name}_snorm{args.s_norm}_{Method_name}_without_attack_Lr{bengin_lr}_TLr{TLr}_SE{args.start_epoch}_noniid_{non_iid_diralpha}"
+            wandb_exper_name = f"Local_backdoor_cv_{dataset_name}_{model_name}_snorm{args.s_norm}_{Method_name}_without_attack_Lr{bengin_lr}_TLr{TLr}_EC{args.edge_case}_SE{args.start_epoch}_noniid_{non_iid_diralpha}"
     
     wandb_start = 1
     
@@ -301,7 +301,7 @@ if __name__ == '__main__':
         
         # wandb_id = 'avn8om2x'
         # wandb.init(id=wandb_id, resume='must', name=wandb_exper_name, entity='imomoe', project=f"backdoor_CV_{dataset_name}_{model_name}_update", config=helper.params)
-        # wandb.init(name=wandb_exper_name, entity='imomoe', project=f"backdoor_CV_{dataset_name}_{model_name}_update", config=helper.params)
+        wandb.init(name=wandb_exper_name, entity='imomoe', project=f"backdoor_CV_{dataset_name}_{model_name}_update", config=helper.params)
         
         wandb.watch_called = False # Re-run the model without restarting the runtime, unnecessary after our next release
         # print("wandbID is : " + wandb_id)
