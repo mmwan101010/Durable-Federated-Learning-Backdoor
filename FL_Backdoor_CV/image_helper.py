@@ -422,7 +422,7 @@ class ImageHelper(Helper):
                     if self.params['resume']:
                         ratio = self.params['gradmask_ratio']
                         checkpoint_folder = self.params['resume_folder']
-                        loaded_params = torch.load(f"{checkpoint_folder}/Backdoor_model_cifar10_resnet_maskRatio{ratio}_Snorm_0.2_checkpoint_model_epoch_2070.pth")
+                        loaded_params = torch.load(f"{checkpoint_folder}/Backdoor_model_cifar10_resnet_maskRatio{ratio}_Snorm_0.2_checkpoint_model_epoch_{start_epoch-1}.pth")
                     else:
                         loaded_params = torch.load(f"{checkpoint_folder}/cifar10_resnet_maskRatio1_Snorm_1.0_checkpoint_model_epoch_{start_epoch}.pth")
 
