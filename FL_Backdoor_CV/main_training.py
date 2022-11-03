@@ -76,6 +76,20 @@ def save_model(file_name=None, helper=None, epoch=None, new_folder_name='saved_m
     filename = "%s/%s_model_epoch_%s.pth" %(path, file_name, epoch)
     torch.save(helper.target_model.state_dict(), filename)
 
+def save_wandb_id(file_name=None, wandb_id=None, new_folder_name='saved_wandb_id'):
+    if new_folder_name is None:
+        path = "."
+    else:
+        path = f'./{new_folder_name}'
+        if not os.path.exists(path):
+            os.makedirs(path)
+
+    filename = "%s/%s.txt" %(path, file_name)
+    if filename:
+        f=open(filename, 'a')
+        f.write(wandb_id)
+        f.close()
+
 if __name__ == '__main__':
 
     print('Start training ------')
@@ -282,12 +296,15 @@ if __name__ == '__main__':
     # wandb = None # if do not use wandb,should be set to None
     # os.environ["WANDB_API_KEY"] = '417379ea7214f7bf59d9e63187d2afbdf53b39fd'
     # os.environ["WANDB_MODE"] = "offline"
-    id = wandb.util.generate_id()
-    wandb.init(id=id, resume="allow", name=wandb_exper_name, entity='imomoe', project=f"backdoor_CV_{dataset_name}_{model_name}_update", config=helper.params)
+    wandb_id = wandb.util.generate_id()
+    wandb.init(id=wandb_id, resume="allow", name=wandb_exper_name, entity='imomoe', project=f"backdoor_CV_{dataset_name}_{model_name}_update", config=helper.params)
     wandb.watch_called = False # Re-run the model without restarting the runtime, unnecessary after our next release
     # 上面为这个实验确定了一个ID，在下次如果需要续点的话，需要在下面设定ID才可以从ID相同的实验中续点
     # os.environ["WANDB_RESUME"] = "allow"
     # os.environ["WANDB_RUN_ID"] = wandb.util.generate_id()
+    print("wandbID is : " + wandb_id)
+    save_wandb_id(wandb_exper_name, wandb_id + "\n", )
+    
     
     
     
