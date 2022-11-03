@@ -277,8 +277,12 @@ if __name__ == '__main__':
                 Method_name = f'Neurotoxin_GradMaskRation{args.gradmask_ratio}'
             wandb_exper_name = f"Local_backdoor_cv_{dataset_name}_{model_name}_snorm{args.s_norm}_{Method_name}_without_attack_Lr{bengin_lr}_TLr{TLr}_SE{args.start_epoch}_noniid_{non_iid_diralpha}"
     # wandb = None # if do not use wandb,should be set to None
-    wandb.init(name=wandb_exper_name, entity='imomoe', project=f"backdoor_CV_{dataset_name}_{model_name}_update", config=helper.params)
+    id = wandb.util.generate_id()
+    wandb.init(id=id, resume="allow", name=wandb_exper_name, entity='imomoe', project=f"backdoor_CV_{dataset_name}_{model_name}_update", config=helper.params)
     wandb.watch_called = False # Re-run the model without restarting the runtime, unnecessary after our next release
+    # 上面为这个实验确定了一个ID，在下次如果需要续点的话，需要在下面设定ID才可以从ID相同的实验中续点
+    # os.environ["WANDB_RESUME"] = "allow"
+    # os.environ["WANDB_RUN_ID"] = wandb.util.generate_id()
     
     for epoch in range(helper.params['start_epoch'], helper.params['end_epoch']):
         
