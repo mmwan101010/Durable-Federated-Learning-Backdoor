@@ -75,6 +75,7 @@ def save_model(file_name=None, helper=None, epoch=None, new_folder_name='saved_m
             os.makedirs(path)
     filename = "%s/%s_model_epoch_%s.pth" %(path, file_name, epoch)
     torch.save(helper.target_model.state_dict(), filename)
+    # wandb.save(helper.target_model.state_dict(), './wandb_save')
 
 def save_wandb_id(file_name=None, wandb_id=None, new_folder_name='saved_wandb_id'):
     if new_folder_name is None:
@@ -296,17 +297,21 @@ if __name__ == '__main__':
     # wandb = None # if do not use wandb,should be set to None
     # os.environ["WANDB_API_KEY"] = '417379ea7214f7bf59d9e63187d2afbdf53b39fd'
     # os.environ["WANDB_MODE"] = "offline"
-    #wandb_id = wandb.util.generate_id()
-    #wandb.init(id=wandb_id, resume="allow", name=wandb_exper_name, entity='imomoe', project=f"backdoor_CV_{dataset_name}_{model_name}_update", config=helper.params)
-    wandb.init(resume="allow", name=wandb_exper_name, entity='imomoe', project=f"backdoor_CV_{dataset_name}_{model_name}_update", config=helper.params)
+    # wandb_id = wandb.util.generate_id()
+    wandb_id = 'avn8om2x'
+    wandb.init(id=wandb_id, resume='must', name=wandb_exper_name, entity='imomoe', project=f"backdoor_CV_{dataset_name}_{model_name}_update", config=helper.params)
+    # wandb.init(resume="allow", name=wandb_exper_name, entity='imomoe', project=f"backdoor_CV_{dataset_name}_{model_name}_update", config=helper.params)
     wandb.watch_called = False # Re-run the model without restarting the runtime, unnecessary after our next release
     # 上面为这个实验确定了一个ID，在下次如果需要续点的话，需要在下面设定ID才可以从ID相同的实验中续点
     # os.environ["WANDB_RESUME"] = "allow"
     # os.environ["WANDB_RUN_ID"] = wandb.util.generate_id()
-    # print("wandbID is : " + wandb_id)
-    # save_wandb_id(wandb_exper_name, wandb_id + "\n", )
-    
-    
+    print("wandbID is : " + wandb_id)
+    save_wandb_id(wandb_exper_name, wandb_id + "\n", )
+    """
+    if wandb.run.resumed:
+        checkpoint = torch.load(wandb.restore('./wandb_resume'))
+        helper.model.load_state_dict(checkpoint['model_state_dict'])
+    """
     
     
     for epoch in range(helper.params['start_epoch'], helper.params['end_epoch']):
@@ -438,6 +443,10 @@ if __name__ == '__main__':
 
         save_acc_file(file_name=wandb_exper_name, acc_list=benign_loss, new_folder_name=new_folder_name_loss)
         save_acc_file(file_name=wandb_exper_name, acc_list=benign_acc, new_folder_name=new_folder_name_acc)
+
+
+
+
     strTime = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
     emailcontant = '实验在第 ' + str(epoch) + 'epoch 结束\n' + '结束时间为：' + strTime
     sendEmail("neurotoxin实验进度 ||", " 完成", emailcontant)
