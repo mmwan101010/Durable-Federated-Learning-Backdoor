@@ -75,7 +75,6 @@ def save_model(file_name=None, helper=None, epoch=None, new_folder_name='saved_m
             os.makedirs(path)
     filename = "%s/%s_model_epoch_%s.pth" %(path, file_name, epoch)
     torch.save(helper.target_model.state_dict(), filename)
-    # wandb.save(helper.target_model.state_dict(), './wandb_save')
 
 def save_wandb_id(file_name=None, wandb_id=None, new_folder_name='saved_wandb_id'):
     if new_folder_name is None:
@@ -292,26 +291,21 @@ if __name__ == '__main__':
                 Method_name = f'Neurotoxin_GradMaskRation{args.gradmask_ratio}'
             wandb_exper_name = f"Local_backdoor_cv_{dataset_name}_{model_name}_snorm{args.s_norm}_{Method_name}_without_attack_Lr{bengin_lr}_TLr{TLr}_SE{args.start_epoch}_noniid_{non_iid_diralpha}"
     
+    wandb_start = 1
     
-    
-    # wandb = None # if do not use wandb,should be set to None
-    # os.environ["WANDB_API_KEY"] = '417379ea7214f7bf59d9e63187d2afbdf53b39fd'
-    # os.environ["WANDB_MODE"] = "offline"
-    # wandb_id = wandb.util.generate_id()
-    wandb_id = 'avn8om2x'
-    wandb.init(id=wandb_id, resume='must', name=wandb_exper_name, entity='imomoe', project=f"backdoor_CV_{dataset_name}_{model_name}_update", config=helper.params)
-    # wandb.init(resume="allow", name=wandb_exper_name, entity='imomoe', project=f"backdoor_CV_{dataset_name}_{model_name}_update", config=helper.params)
-    wandb.watch_called = False # Re-run the model without restarting the runtime, unnecessary after our next release
-    # 上面为这个实验确定了一个ID，在下次如果需要续点的话，需要在下面设定ID才可以从ID相同的实验中续点
-    # os.environ["WANDB_RESUME"] = "allow"
-    # os.environ["WANDB_RUN_ID"] = wandb.util.generate_id()
-    print("wandbID is : " + wandb_id)
-    save_wandb_id(wandb_exper_name, wandb_id + "\n", )
-    """
-    if wandb.run.resumed:
-        checkpoint = torch.load(wandb.restore('./wandb_resume'))
-        helper.model.load_state_dict(checkpoint['model_state_dict'])
-    """
+    if wandb_start == 0:
+        wandb = None # if do not use wandb,should be set to None
+    else:
+        # os.environ["WANDB_API_KEY"] = '417379ea7214f7bf59d9e63187d2afbdf53b39fd'
+        # os.environ["WANDB_MODE"] = "offline"
+        
+        # wandb_id = 'avn8om2x'
+        # wandb.init(id=wandb_id, resume='must', name=wandb_exper_name, entity='imomoe', project=f"backdoor_CV_{dataset_name}_{model_name}_update", config=helper.params)
+        # wandb.init(name=wandb_exper_name, entity='imomoe', project=f"backdoor_CV_{dataset_name}_{model_name}_update", config=helper.params)
+        
+        wandb.watch_called = False # Re-run the model without restarting the runtime, unnecessary after our next release
+        # print("wandbID is : " + wandb_id)
+        # save_wandb_id(wandb_exper_name, wandb_id + "\n", )
     
     
     for epoch in range(helper.params['start_epoch'], helper.params['end_epoch']):
@@ -376,13 +370,14 @@ if __name__ == '__main__':
                 print('train poison loss (after fedavg)', epoch_loss_p_train)
                 print('train poison acc (after fedavg)', epoch_acc_p_train)
                 
-                wandb.log({
-                           'test poison loss (after fedavg)': epoch_loss_p,
-                           'test poison acc (after fedavg)': epoch_acc_p,
-                           'train poison loss (after fedavg)': epoch_loss_p_train,
-                           'train poison acc (after fedavg)': epoch_acc_p_train,
-                           'epoch': epoch
-                           })
+                if wandb:
+                    wandb.log({
+                            'test poison loss (after fedavg)': epoch_loss_p,
+                            'test poison acc (after fedavg)': epoch_acc_p,
+                            'train poison loss (after fedavg)': epoch_loss_p_train,
+                            'train poison acc (after fedavg)': epoch_acc_p_train,
+                            'epoch': epoch
+                            })
 
             else:
                 raise ValueError("Unknown model")
@@ -419,11 +414,13 @@ if __name__ == '__main__':
 
         print('benign test loss (after fedavg)', epoch_loss)
         print('benign test acc (after fedavg)', epoch_acc)
-        wandb.log({
-                    'benign test loss (after fedavg)': epoch_loss,
-                    'benign test acc (after fedavg)': epoch_acc,
-                    'epoch': epoch
-                    })
+        
+        if wandb:
+            wandb.log({
+                        'benign test loss (after fedavg)': epoch_loss,
+                        'benign test acc (after fedavg)': epoch_acc,
+                        'epoch': epoch
+                        })
 
 
         benign_acc.append(epoch_acc)
