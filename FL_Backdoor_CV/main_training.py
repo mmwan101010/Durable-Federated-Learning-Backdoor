@@ -276,6 +276,9 @@ if __name__ == '__main__':
             else:
                 Method_name = f'Neurotoxin_GradMaskRation{args.gradmask_ratio}'
             wandb_exper_name = f"Local_backdoor_cv_{dataset_name}_{model_name}_snorm{args.s_norm}_{Method_name}_without_attack_Lr{bengin_lr}_TLr{TLr}_SE{args.start_epoch}_noniid_{non_iid_diralpha}"
+    
+    
+    
     # wandb = None # if do not use wandb,should be set to None
     # os.environ["WANDB_API_KEY"] = '417379ea7214f7bf59d9e63187d2afbdf53b39fd'
     # os.environ["WANDB_MODE"] = "offline"
@@ -285,6 +288,8 @@ if __name__ == '__main__':
     # 上面为这个实验确定了一个ID，在下次如果需要续点的话，需要在下面设定ID才可以从ID相同的实验中续点
     # os.environ["WANDB_RESUME"] = "allow"
     # os.environ["WANDB_RUN_ID"] = wandb.util.generate_id()
+    
+    
     
     for epoch in range(helper.params['start_epoch'], helper.params['end_epoch']):
         
