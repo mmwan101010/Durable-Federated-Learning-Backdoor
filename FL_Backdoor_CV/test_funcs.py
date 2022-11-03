@@ -52,7 +52,7 @@ def test_poison_cv(helper, epoch, data_source,
 
         data, target = batch
         data = data.cuda()
-        target = target.cuda()
+        target = target.cuda().to(torch.int64)
         data.requires_grad_(False)
         target.requires_grad_(False)
 
