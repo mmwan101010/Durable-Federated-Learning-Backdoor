@@ -196,6 +196,16 @@ if __name__ == '__main__':
                         default='digits',
                         type=str,
                         help='byclass digits letters')
+    
+    parser.add_argument('--wandb_start',
+                        default=1,
+                        type=int,
+                        help='weather start wandb')    
+    
+    parser.add_argument('--wandb_id',
+                        default='',
+                        type=str,
+                        help='wandb_id to resume if wandb_start = 1') 
 
     parser.add_argument('--sentence_id_list', nargs='+', type=int)
     args = parser.parse_args()
@@ -243,8 +253,10 @@ if __name__ == '__main__':
     # Load the helper object
     helper = ImageHelper(params=params_loaded)
     helper.create_model_cv()
+    # 扩充边界并裁剪
     helper.load_data_cv()
     helper.load_benign_data_cv()
+    # 修改图片的标签
     helper.load_poison_data_cv()
 
     if helper.params['is_poison']:
@@ -291,17 +303,15 @@ if __name__ == '__main__':
                 Method_name = f'Neurotoxin_GradMaskRation{args.gradmask_ratio}'
             wandb_exper_name = f"Local_backdoor_cv_{dataset_name}_{model_name}_snorm{args.s_norm}_{Method_name}_without_attack_Lr{bengin_lr}_TLr{TLr}_EC{args.edge_case}_SE{args.start_epoch}_noniid_{non_iid_diralpha}"
     
-    wandb_start = 1
     
-    if wandb_start == 0:
+    if args.wandb_start == 0:
         wandb = None # if do not use wandb,should be set to None
     else:
         # os.environ["WANDB_API_KEY"] = '417379ea7214f7bf59d9e63187d2afbdf53b39fd'
         # os.environ["WANDB_MODE"] = "offline"
         
-        # wandb_id = ''
-        # wandb.init(id=wandb_id, resume='must', name=wandb_exper_name, entity='imomoe', project=f"backdoor_CV_{dataset_name}_{model_name}_update", config=helper.params)
-        wandb.init(name=wandb_exper_name, entity='imomoe', project=f"backdoor_CV_{dataset_name}_{model_name}_update", config=helper.params)
+        wandb.init(id=args.wandb_id, resume='must', name=wandb_exper_name, entity='imomoe', project=f"backdoor_CV_{dataset_name}_{model_name}_update", config=helper.params)
+        # wandb.init(name=wandb_exper_name, entity='imomoe', project=f"backdoor_CV_{dataset_name}_{model_name}_update", config=helper.params)
         
         wandb.watch_called = False # Re-run the model without restarting the runtime, unnecessary after our next release
         # print("wandbID is : " + wandb_id)
