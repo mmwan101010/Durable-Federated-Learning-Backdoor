@@ -253,8 +253,10 @@ if __name__ == '__main__':
     # Load the helper object
     helper = ImageHelper(params=params_loaded)
     helper.create_model_cv()
+    # 扩充边界并裁剪
     helper.load_data_cv()
     helper.load_benign_data_cv()
+    # 修改图片的标签
     helper.load_poison_data_cv()
 
     if helper.params['is_poison']:

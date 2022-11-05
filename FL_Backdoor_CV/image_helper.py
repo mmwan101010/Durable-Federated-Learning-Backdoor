@@ -126,6 +126,8 @@ class ImageHelper(Helper):
     def load_data_cv(self):
 
         ### data load
+        ### 先填充再裁剪，所以transforms.RandomCrop(32, padding=4)这里是现在周围填上4边再裁剪出32x32的图片
+        ### 因为cifar10本身就是32x32所以，这里无论如何都会裁剪出黑边，除非刚好裁剪到中心，如果裁剪到黑边的话可以当作触发器
         transform_train = transforms.Compose([
             transforms.RandomCrop(32, padding=4),
             transforms.RandomHorizontalFlip(),
