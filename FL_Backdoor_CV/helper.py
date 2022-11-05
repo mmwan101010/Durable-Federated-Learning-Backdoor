@@ -145,7 +145,12 @@ class Helper:
         return mask_grad_list
 
     def grad_mask_cv(self, helper, model, dataset_clearn, criterion, ratio=0.5):
-        """Generate a gradient mask based on the given dataset"""
+        """Generate a gradient mask based on the given dataset
+            既然在不常用梯度上更新可以使后门保持更久，那么我使用更好的中毒数据来更新梯度就会使梯度更好，从而使后门更好
+            因为中毒数据不仅使后门拥有了这些毒性的特点，又能使后门更耐用
+            再者，虽然我们不选择最大的梯度，但遮罩的比例其实不高，所以对于后门来说，这些梯度也是有用的
+            可能遮罩后毒性的效果会下降，但是必定有部分存在，所以这样的方法是可行的
+        """
         model.train()
         model.zero_grad()
 
@@ -219,6 +224,7 @@ class Helper:
 
             percentage_mask_list = []
             k_layer = 0
+            # 迭代打印model.named_parameters()将会打印每一次迭代元素的名字和param
             for _, parms in model.named_parameters():
                 if parms.requires_grad:
                     gradients = parms.grad.abs().view(-1)
@@ -233,10 +239,12 @@ class Helper:
                         ratio_tmp = 1 - l2_norm_list[k_layer].item() / sum_grad_layer
                         _, indices = torch.topk(-1*gradients, int(gradients_length*ratio))
 
-                    # 获得indices之后，将indices这么多的梯度设为1，作为mask_grad_list的flat，都设定为1，也就是要把这些遮罩住
+                    # 获得indices之后，将indices这么多的梯度设为1，作为mask_grad_list的flat，都设定为1，也就是要把这些遮罩住，遮罩住的就是要的梯度
                     # 也就是说以下三行代码确定了gradMask
                     mask_flat = torch.zeros(gradients_length)
                     mask_flat[indices.cpu()] = 1.0
+                    # 在for循环下遮罩，也就是说在每一层的梯度中，把大的梯度都遮住
+                    # 梯度越大则说明他对方向的影响也就越大，因此我们要遮住大的，我们在剩下的小的进行更新，也就不容易被覆盖了
                     mask_grad_list.append(mask_flat.reshape(parms.grad.size()).cuda())
                 
                     # percentage_mask1 计算出了遮盖的grad占总的%多少
@@ -284,6 +292,7 @@ class Helper:
 
         mask_grad_list = []
 
+        # 迭代打印model.named_parameters()将会打印每一次迭代元素的名字和param
         for _, parms in model.named_parameters():
             if parms.requires_grad:
                 gradients = parms.grad.abs().view(-1)
