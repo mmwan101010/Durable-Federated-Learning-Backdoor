@@ -299,7 +299,7 @@ if __name__ == '__main__':
         # os.environ["WANDB_API_KEY"] = '417379ea7214f7bf59d9e63187d2afbdf53b39fd'
         # os.environ["WANDB_MODE"] = "offline"
         
-        # wandb_id = 'avn8om2x'
+        # wandb_id = ''
         # wandb.init(id=wandb_id, resume='must', name=wandb_exper_name, entity='imomoe', project=f"backdoor_CV_{dataset_name}_{model_name}_update", config=helper.params)
         wandb.init(name=wandb_exper_name, entity='imomoe', project=f"backdoor_CV_{dataset_name}_{model_name}_update", config=helper.params)
         

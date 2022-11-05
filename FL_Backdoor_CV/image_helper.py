@@ -422,13 +422,14 @@ class ImageHelper(Helper):
                     if self.params['resume']:
                         ratio = self.params['gradmask_ratio']
                         checkpoint_folder = self.params['resume_folder']
-                        loaded_params = torch.load(f"{checkpoint_folder}/Backdoor_model_cifar10_resnet_maskRatio{ratio}_Snorm_0.2_checkpoint_model_epoch_{start_epoch-1}.pth")
+                        loaded_params = torch.load(f"{checkpoint_folder}/Backdoor_model_cifar10_resnet_maskRatio{ratio}_Snorm_0.2_checkpoint_model_epoch_{start_epoch}.pth")
                     else:
                         loaded_params = torch.load(f"{checkpoint_folder}/cifar10_resnet_maskRatio1_Snorm_1.0_checkpoint_model_epoch_{start_epoch}.pth")
 
                 if self.params['dataset'] == 'cifar100':
-                    loaded_params = torch.load(f"{checkpoint_folder}/cifar100_resnet_maskRatio1_Snorm_2.0_checkpoint_model_epoch_{start_epoch}.pth")
-
+                    # loaded_params = torch.load(f"{checkpoint_folder}/cifar100_resnet_maskRatio1_Snorm_2.0_checkpoint_model_epoch_{start_epoch}.pth")
+                    # ↑ 原代码，使用Snorm2.0，↓ 因为之前预训练的是Snorm1，故修改为1，暂时使用，查看1的效果如何，2.0的1800epoch正在实验室训练，完成后再使用上述代码进行比较
+                    loaded_params = torch.load(f"{checkpoint_folder}/cifar100_resnet_Snorm_1_checkpoint_model_epoch_{start_epoch}.pth")
                 target_model.load_state_dict(loaded_params)
             else:
                 self.start_epoch = 1
