@@ -222,7 +222,7 @@ class ImageHelper(Helper):
                 print('shape of edge case train data (southwest airplane dataset train)',saved_southwest_dataset_train.shape)
                 print('shape of edge case test data (southwest airplane dataset test)',saved_southwest_dataset_test.shape)
 
-
+                # np.ones((x,y), dype=int) 建立一个[x,y]维的int型数组，且值为1，再*9,这里其实就是弄一个数组全写满9，一会组建dataset的时候作为标签的值
                 sampled_targets_array_train = 9 * np.ones((saved_southwest_dataset_train.shape[0],), dtype =int)
                 sampled_targets_array_test = 9 * np.ones((saved_southwest_dataset_test.shape[0],), dtype =int)
                 print(np.max(saved_southwest_dataset_train))
@@ -324,6 +324,7 @@ class ImageHelper(Helper):
                                sampler=torch.utils.data.sampler.SubsetRandomSampler(
                                   self.poison_images_ind
                                ),)
+                               # torch.utils.data.sampler.SubsetRandomSampler(indices)无放回地按照给定的索引列表采样样本元素
                                #num_workers=4)#这个num_workers=8是自己加的 原本没有
 
     def get_train(self, indices):

@@ -1,6 +1,7 @@
 # wandb上传
 wandb sync ./wandb/run-XXXXXXXXXXX/logs
 
+python main_training.py --run_slurm 0 --GPU_id 0  --start_epoch 2771 --is_poison True --defense True --s_norm 0.2 --attack_num 1 --gradmask_ratio 1.0 --poison_lr 0.003 --aggregate_all_layer 1 --edge_case 1 --resume 1 --resume_folder ./Backdoor_saved_models_update1_noniid_EC1_cifar10_Baseline_EE3801 --wandb_start 1 --wandb_id 3cf9ktow
 
 python main_training.py --run_slurm 0 --GPU_id 0  --start_epoch 2081 --is_poison True --defense True --s_norm 0.2 --attack_num 1 --gradmask_ratio 0.95 --poison_lr 0.02 --aggregate_all_layer 1 --edge_case 0  --resume 1 --resume_folder ./Backdoor_saved_models_update1_noniid_EC0_cifar10_Neurotoxin_GradMaskRation0.95_EE3801
 
