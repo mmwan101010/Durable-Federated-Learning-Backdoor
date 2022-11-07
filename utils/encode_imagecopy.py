@@ -52,7 +52,7 @@ def encode(src_image, line_number):
     secret = [int(x) for x in packet_binary]
     secret.extend([0, 0, 0, 0])
 
-    #image = Image.open(src_image)
+    image = Image.fromarray(src_image)
     image = np.array(image, dtype=np.float32) / 255.
 
     feed_dict = {
@@ -68,9 +68,9 @@ def encode(src_image, line_number):
 
     name = str(line_number)
 
-    im = Image.fromarray(np.array(hidden_img))
-    im.save(out_dir + '/' + name + '_hidden.png')
-    im = Image.fromarray(np.squeeze(residual))
-    im.save(out_dir + '/' + name + '_residual.png')
+    im_hidden = Image.fromarray(np.array(hidden_img))
+    im_hidden.save(out_dir + '/' + name + '_hidden.png')
+    im_residual = Image.fromarray(np.squeeze(residual))
+    im_residual.save(out_dir + '/' + name + '_residual.png')
     ans = print('saved_Image:' + name)
-    return ans
+    return np.array(im_hidden), np.array(im_residual)
