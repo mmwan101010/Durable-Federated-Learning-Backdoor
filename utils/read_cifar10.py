@@ -15,7 +15,7 @@ paser.add_argument('--line_number', type=int, default=0, help='input which line 
 
 args = paser.parse_args()
 
-file = 'X:\Directory\code\Durable-Federated-Learning-Backdoor\FL_Backdoor_CV\data\cifar-10-batches-py\data_batch_1 copy'
+file = 'X:\Directory\code\Durable-Federated-Learning-Backdoor\FL_Backdoor_CV\data\cifar-10-batches-py\data_batch_1'
 # file = 'X:\Directory\code\Durable-Federated-Learning-Backdoor\FL_Backdoor_CV\data\cifar-10-batches-py\data_batch_1'
 # 解压缩，返回解压后的字典
 def unpickle(file):
@@ -42,7 +42,7 @@ dict = unpickle(file)
 data = dict.get("data")
 label = dict.get("labels")
 
-for args.line_number in range(args.line_number, 10):
+for args.line_number in range(args.line_number, 50):
     image_m = np.reshape(data[args.line_number], (3, 32, 32))
     image_label = label[args.line_number]
     r = image_m[0, :, :]
@@ -61,7 +61,7 @@ for args.line_number in range(args.line_number, 10):
     img32_compress = cv.resize(im_hidden, (32, 32), 1)
 
     # python的数列范围是不取最后一个的
-    print(img32_compress.shape)
+    # print(img32_compress.shape)
 
     temp_r = np.reshape(img32_compress[:, :, 0], (1024, )).tolist()
     temp_g = np.reshape(img32_compress[:, :, 1], (1024, )).tolist()
@@ -93,8 +93,8 @@ for args.line_number in range(args.line_number, 10):
 """
 
 dict['data'] = dict['data'].tolist()
-
-f1 = open(file, 'wb+')
+save_file_path = 'X:\Directory\code\Durable-Federated-Learning-Backdoor\FL_Backdoor_CV\data\cifar-10-batches-py\data_batch_1_poison'
+f1 = open(save_file_path, 'wb+')
 pickle.dump(dict, f1)
 # f1.write(json.dumps(dict).encode())
 f1.close()
