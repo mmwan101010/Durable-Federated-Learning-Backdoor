@@ -6,9 +6,16 @@ import cv2 as cv
 import matplotlib.pyplot as plt
 import encode_imagecopy as ecode
 from PIL import Image as img
+import argparse
+import json
 
+paser = argparse.ArgumentParser()
 
-file = 'D:\code\code_xwd\Durable-Federated-Learning-Backdoor\FL_Backdoor_CV\data\cifar-10-batches-py\data_batch_01'
+paser.add_argument('--line_number', type=int, default=0, help='input which line number to encode')
+
+args = paser.parse_args()
+
+file = 'X:\Directory\code\Durable-Federated-Learning-Backdoor\FL_Backdoor_CV\data\cifar-10-batches-py\data_batch_1 copy'
 # file = 'X:\Directory\code\Durable-Federated-Learning-Backdoor\FL_Backdoor_CV\data\cifar-10-batches-py\data_batch_1'
 # 解压缩，返回解压后的字典
 def unpickle(file):
@@ -30,43 +37,64 @@ label_dict = {
     9:'truck'
 }
 
-# 第几张图片
-line_number = 0
 # 显示测试集图片
 dict = unpickle(file)
 data = dict.get("data")
 label = dict.get("labels")
-image_m = np.reshape(data[line_number], (3, 32, 32))
-image_label = label[line_number]
-r = image_m[0, :, :]
-g = image_m[1, :, :]
-b = image_m[2, :, :]
-img32 = np.array(cv.merge([r, g, b]))
 
-test = 1
+for args.line_number in range(args.line_number, 10):
+    image_m = np.reshape(data[args.line_number], (3, 32, 32))
+    image_label = label[args.line_number]
+    r = image_m[0, :, :]
+    g = image_m[1, :, :]
+    b = image_m[2, :, :]
+    img32 = np.array(cv.merge([r, g, b]))
 
-if test == 1:
-    r1 = img32[0:15, 0:15, 0] = 255
-    g1 = img32[0:15, 0:15, 1] = 255
-    b1 = img32[0:15, 0:15, 2] = 255
+    # 扩充
+    img224 = cv.resize(img32, (224, 224), 1)
 
-print(img32.shape)
+    encode_start = 1
 
-# 扩充
-img224 = cv.resize(img32, (224, 224), 1)
-print(img224.shape)
+    if encode_start == 1:
+        im_hidden, im_residual = ecode.encode(img224, args.line_number)
+        
+    img32_compress = cv.resize(im_hidden, (32, 32), 1)
 
-plt.ion()
-plt.figure()
-plt.subplot(1, 2, 1)
-plt.imshow(img32)
-plt.subplot(1, 2, 2)
-plt.imshow(img224)
-plt.title(label_dict[label[line_number]])
-plt.ioff()
-plt.show()
+    # python的数列范围是不取最后一个的
+    print(img32_compress.shape)
 
-encode_start = 1
+    temp_r = np.reshape(img32_compress[:, :, 0], (1024, )).tolist()
+    temp_g = np.reshape(img32_compress[:, :, 1], (1024, )).tolist()
+    temp_b = np.reshape(img32_compress[:, :, 2], (1024, )).tolist()
 
-if encode_start == 1:
-    ecode.encode(img224, line_number)
+    dict.get("data")[args.line_number,0:1024] = temp_r
+    dict.get("data")[args.line_number,1024:2048] = temp_g
+    dict.get("data")[args.line_number,2048:3072] = temp_b
+
+    backout_r = dict.get("data")[args.line_number,0:1024].reshape(32, 32)
+    backout_g = dict.get("data")[args.line_number,1024:2048].reshape(32, 32)
+    backout_b = dict.get("data")[args.line_number,2048:3072].reshape(32, 32)
+    img32_backout = np.array(cv.merge([backout_r, backout_g, backout_b]))
+
+
+"""
+    plt.ion()
+    plt.figure()
+    plt.subplot(2, 2, 1)
+    plt.imshow(img32)   # cifar10 原图
+    plt.subplot(2, 2, 2)
+    plt.imshow(img224)  # cifar10 扩充224图
+    plt.subplot(2, 2, 3)
+    plt.imshow(img32_compress)  # cifar10 压缩至32后的图
+    plt.title(label_dict[label[args.line_number]] + " " + str(args.line_number))
+    plt.subplot(2, 2, 4)
+    plt.imshow(img32_backout)   # cifar10 回传后提出来看有没有进去
+    plt.show()
+"""
+
+dict['data'] = dict['data'].tolist()
+
+f1 = open(file, 'wb+')
+pickle.dump(dict, f1)
+# f1.write(json.dumps(dict).encode())
+f1.close()
