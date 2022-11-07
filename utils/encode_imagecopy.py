@@ -69,11 +69,8 @@ def encode(src_image, line_number):
 
     name = str(line_number)
 
-<<<<<<< HEAD
     if not os.path.exists(out_dir):#检查目录是否存在
                 os.makedirs(out_dir)
-=======
->>>>>>> main
     im_hidden = Image.fromarray(np.array(hidden_img))
     im_hidden.save(out_dir + '/' + name + '_hidden.png')
     im_residual = Image.fromarray(np.squeeze(residual))
