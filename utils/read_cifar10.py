@@ -18,8 +18,8 @@ args = paser.parse_args()
 # 1 is dorm
 
 start = 1
-file = '..\FL_Backdoor_CV\data\cifar-10-batches-py\data_batch_1'
-save_file_path = '..\FL_Backdoor_CV\data\cifar-10-batches-py\data_batch_1_poison'
+file = '..\FL_Backdoor_CV\data\cifar-10-batches-py\\test_batch'
+save_file_path = '..\FL_Backdoor_CV\data\cifar-10-batches-py\\test_batch_poison'
 
 
 # 解压缩，返回解压后的字典
@@ -47,9 +47,9 @@ dict = unpickle(file)
 data = dict.get("data")
 label = dict.get("labels")
 
-poi_index = open('index.txt', 'a+')
+poi_index = open('index_test.txt', 'a+')
 
-for i in range(args.line_number, args.line_number + 10):
+for i in range(args.line_number, args.line_number + 100):
     image_m = np.reshape(data[i], (3, 32, 32))
     image_label = label[i]
     r = image_m[0, :, :]
