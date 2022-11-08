@@ -18,8 +18,9 @@ import argparse
 def encode(src_image, line_number):
 
     model_path = 'ckpt/encoder_imagenet'
-    # out_dir = 'D:\code\code_xwd\Durable-Federated-Learning-Backdoor\FL_Backdoor_CV\data\\trigger_cifar\\'
-    out_dir = 'X:\Directory\code\Durable-Federated-Learning-Backdoor\FL_Backdoor_CV\data\\trigger_cifar'
+    out_dir = '..\FL_Backdoor_CV\data\cifar-10-batches-py\\trigger_cifar10'
+
+
     secret = 'truck' # lenght of secret less than 7
     secret_size = 100
 

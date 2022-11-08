@@ -16,18 +16,15 @@ paser.add_argument('--line_number', type=int, default=0, help='input which line 
 args = paser.parse_args()
 
 # 1 is dorm
-place = 1
-if place == 1 :
-    file = 'X:\Directory\code\Durable-Federated-Learning-Backdoor\FL_Backdoor_CV\data\cifar-10-batches-py\data_batch_1'
-    save_file_path = 'X:\Directory\code\Durable-Federated-Learning-Backdoor\FL_Backdoor_CV\data\cifar-10-batches-py\data_batch_1_poison'
-else:
-    file = 'D:\code\code_xwd\Durable-Federated-Learning-Backdoor\FL_Backdoor_CV\data\cifar-10-batches-py\data_batch_1'
-    save_file_path = 'D:\code\code_xwd\Durable-Federated-Learning-Backdoor\FL_Backdoor_CV\data\cifar-10-batches-py\data_batch_1_poison'
+
+start = 1
+file = '..\FL_Backdoor_CV\data\cifar-10-batches-py\data_batch_1'
+save_file_path = '..\FL_Backdoor_CV\data\cifar-10-batches-py\data_batch_1_poison'
 
 
 # 解压缩，返回解压后的字典
 def unpickle(file):
-    fo = open(file, 'rb')
+    fo = open(save_file_path, 'rb')
     dict = pickle.load(fo, encoding='latin1')
     fo.close()
     return dict
@@ -50,9 +47,11 @@ dict = unpickle(file)
 data = dict.get("data")
 label = dict.get("labels")
 
-for args.line_number in range(args.line_number, 50):
-    image_m = np.reshape(data[args.line_number], (3, 32, 32))
-    image_label = label[args.line_number]
+poi_index = open('index.txt', 'a+')
+
+for i in range(args.line_number, args.line_number + 10):
+    image_m = np.reshape(data[i], (3, 32, 32))
+    image_label = label[i]
     r = image_m[0, :, :]
     g = image_m[1, :, :]
     b = image_m[2, :, :]
@@ -64,28 +63,31 @@ for args.line_number in range(args.line_number, 50):
     encode_start = 1
 
     if encode_start == 1:
-        im_hidden, im_residual = ecode.encode(img224, args.line_number)
+        im_hidden, im_residual = ecode.encode(img224, i)
         
     img32_compress = cv.resize(im_hidden, (32, 32), 1)
 
     # python的数列范围是不取最后一个的
     # print(img32_compress.shape)
 
-    temp_r = np.reshape(img32_compress[:, :, 0], (1024, )).tolist()
-    temp_g = np.reshape(img32_compress[:, :, 1], (1024, )).tolist()
-    temp_b = np.reshape(img32_compress[:, :, 2], (1024, )).tolist()
+    temp_r = np.reshape(img32_compress[:, :, 0], (1024, ))
+    temp_g = np.reshape(img32_compress[:, :, 1], (1024, ))
+    temp_b = np.reshape(img32_compress[:, :, 2], (1024, ))
 
-    dict.get("data")[args.line_number,0:1024] = temp_r
-    dict.get("data")[args.line_number,1024:2048] = temp_g
-    dict.get("data")[args.line_number,2048:3072] = temp_b
+    dict.get("data")[i][0:1024] = np.mat(temp_r)
+    dict.get("data")[i][1024:2048] = np.mat(temp_g)
+    dict.get("data")[i][2048:3072] = np.mat(temp_b)
+    
+    """
+        backout_r = np.array(dict.get("data")[i][0:1024]).reshape(32, 32)
+        backout_g = np.array(dict.get("data")[i][1024:2048]).reshape(32, 32)
+        backout_b = np.array(dict.get("data")[i][2048:3072]).reshape(32, 32)
+        img32_backout = np.array(cv.merge([backout_r, backout_g, backout_b]))
+    """
 
-    backout_r = dict.get("data")[args.line_number,0:1024].reshape(32, 32)
-    backout_g = dict.get("data")[args.line_number,1024:2048].reshape(32, 32)
-    backout_b = dict.get("data")[args.line_number,2048:3072].reshape(32, 32)
-    img32_backout = np.array(cv.merge([backout_r, backout_g, backout_b]))
-
-
-"""
+    poi_index.write(str(i) + '  ' + label_dict[image_label] + '\n')
+    
+    """
     plt.ion()
     plt.figure()
     plt.subplot(2, 2, 1)
@@ -94,15 +96,15 @@ for args.line_number in range(args.line_number, 50):
     plt.imshow(img224)  # cifar10 扩充224图
     plt.subplot(2, 2, 3)
     plt.imshow(img32_compress)  # cifar10 压缩至32后的图
-    plt.title(label_dict[label[args.line_number]] + " " + str(args.line_number))
+    plt.title(label_dict[label[i]] + " " + str(i))
     plt.subplot(2, 2, 4)
     plt.imshow(img32_backout)   # cifar10 回传后提出来看有没有进去
     plt.show()
-"""
+    """
+    
 
-
-dict['data'] = dict['data'].tolist()
 f1 = open(save_file_path, 'wb+')
 pickle.dump(dict, f1)
-# f1.write(json.dumps(dict).encode())
 f1.close()
+
+poi_index.close()
