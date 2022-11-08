@@ -15,8 +15,16 @@ paser.add_argument('--line_number', type=int, default=0, help='input which line 
 
 args = paser.parse_args()
 
-file = 'X:\Directory\code\Durable-Federated-Learning-Backdoor\FL_Backdoor_CV\data\cifar-10-batches-py\data_batch_1'
-# file = 'X:\Directory\code\Durable-Federated-Learning-Backdoor\FL_Backdoor_CV\data\cifar-10-batches-py\data_batch_1'
+# 1 is dorm
+place = 1
+if place == 1 :
+    file = 'X:\Directory\code\Durable-Federated-Learning-Backdoor\FL_Backdoor_CV\data\cifar-10-batches-py\data_batch_1'
+    save_file_path = 'X:\Directory\code\Durable-Federated-Learning-Backdoor\FL_Backdoor_CV\data\cifar-10-batches-py\data_batch_1_poison'
+else:
+    file = 'D:\code\code_xwd\Durable-Federated-Learning-Backdoor\FL_Backdoor_CV\data\cifar-10-batches-py\data_batch_1'
+    save_file_path = 'D:\code\code_xwd\Durable-Federated-Learning-Backdoor\FL_Backdoor_CV\data\cifar-10-batches-py\data_batch_1_poison'
+
+
 # 解压缩，返回解压后的字典
 def unpickle(file):
     fo = open(file, 'rb')
@@ -92,8 +100,8 @@ for args.line_number in range(args.line_number, 50):
     plt.show()
 """
 
+
 dict['data'] = dict['data'].tolist()
-save_file_path = 'X:\Directory\code\Durable-Federated-Learning-Backdoor\FL_Backdoor_CV\data\cifar-10-batches-py\data_batch_1_poison'
 f1 = open(save_file_path, 'wb+')
 pickle.dump(dict, f1)
 # f1.write(json.dumps(dict).encode())
