@@ -127,7 +127,7 @@ class ImageHelper(Helper):
 
         ### data load
         ### 先填充再裁剪，所以transforms.RandomCrop(32, padding=4)这里是现在周围填上4边再裁剪出32x32的图片
-        ### 因为cifar10本身就是32x32所以，这里无论如何都会裁剪出黑边，除非刚好裁剪到中心，如果裁剪到黑边的话可以当作触发器
+        ### 这里padding的是用作数据增强，来提高模型的泛化能力的
         transform_train = transforms.Compose([
             transforms.RandomCrop(32, padding=4),
             transforms.RandomHorizontalFlip(),
@@ -146,6 +146,8 @@ class ImageHelper(Helper):
 
             self.test_dataset = datasets.CIFAR10(self.params['data_folder'], train=False, transform=transform_test)
 
+            
+            
         # self.test_dataset_cifar100 = datasets.CIFAR100(self.params['data_folder'], train=False, transform=transform_test, download=True)
         if self.params['dataset'] == 'cifar100':
 
@@ -310,7 +312,7 @@ class ImageHelper(Helper):
 
             self.poison_images_ind = indices
             ### self.poison_images_ind_t = list(set(range_no_id) - set(indices))
-
+            
             return torch.utils.data.DataLoader(self.test_dataset,
                                batch_size=self.params['batch_size'],
                                sampler=torch.utils.data.sampler.SubsetRandomSampler(self.poison_images_ind),)

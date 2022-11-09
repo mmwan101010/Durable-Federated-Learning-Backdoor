@@ -15,7 +15,7 @@ from tensorflow.python.saved_model import signature_constants
 import argparse
 
 
-def encode(src_image, line_number):
+def encode(src_image):
 
     model_path = 'ckpt/encoder_imagenet'
     out_dir = '..\FL_Backdoor_CV\data\cifar-10-batches-py\\trigger_cifar10_test'
@@ -68,13 +68,13 @@ def encode(src_image, line_number):
     residual = residual[0] + .5  # For visualization
     residual = (residual * 255).astype(np.uint8)
 
-    name = str(line_number)
+    # name = str(line_number)
 
     if not os.path.exists(out_dir):#检查目录是否存在
                 os.makedirs(out_dir)
     im_hidden = Image.fromarray(np.array(hidden_img))
-    im_hidden.save(out_dir + '/' + name + '_hidden.png')
+    # im_hidden.save(out_dir + '/' + name + '_hidden.png')
     im_residual = Image.fromarray(np.squeeze(residual))
-    im_residual.save(out_dir + '/' + name + '_residual.png')
-    ans = print('saved_Image:' + name)
+    # im_residual.save(out_dir + '/' + name + '_residual.png')
+    
     return np.array(im_hidden), np.array(im_residual)
