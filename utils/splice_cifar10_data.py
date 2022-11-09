@@ -48,6 +48,7 @@ def main():
 
     print(str(splice_data.shape()) + "" + str(len(splice_label)))
 
+    return splice_data, splice_label
 
 if __name__ == '__main__':
     main()
