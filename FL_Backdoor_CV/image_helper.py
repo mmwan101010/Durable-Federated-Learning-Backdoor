@@ -141,12 +141,12 @@ class ImageHelper(Helper):
         ])
 
         if self.params['dataset'] == 'cifar10':
-            self.train_dataset = datasets.CIFAR10(self.params['data_folder'], train=True, download=True,
+            self.train_dataset = datasets.CIFAR10(self.params['data_folder'], train=True, download=False,
                                              transform=transform_train)
 
             self.test_dataset = datasets.CIFAR10(self.params['data_folder'], train=False, transform=transform_test)
 
-            
+        
             
         # self.test_dataset_cifar100 = datasets.CIFAR100(self.params['data_folder'], train=False, transform=transform_test, download=True)
         if self.params['dataset'] == 'cifar100':
