@@ -313,6 +313,29 @@ class ImageHelper(Helper):
             self.poison_images_ind = indices
             ### self.poison_images_ind_t = list(set(range_no_id) - set(indices))
             
+            with open('./data/southwest_images_new_train.pkl', 'rb') as train_f:
+                poison_cifar10_train = pickle.load(train_f)
+
+            with open('./data/southwest_images_new_test.pkl', 'rb') as test_f:
+                poison_cifar10_test = pickle.load(test_f)
+                
+            sampled_targets_array_train = 9 * np.ones((poison_cifar10_train.shape[0],), dtype =int)
+            sampled_targets_array_test = 9 * np.ones((poison_cifar10_train.shape[0],), dtype =int)
+            print(np.max(saved_southwest_dataset_train))
+
+            transform = transforms.Compose([
+                transforms.ToTensor(),
+                transforms.Normalize((0.4914, 0.4822, 0.4465), (0.2023, 0.1994, 0.2010)),
+            ])
+            
+            trainset = Customize_Dataset(X=poison_cifar10_train, Y=sampled_targets_array_train, transform=transform)
+            self.poisoned_train_loader = DataLoader(dataset = trainset, batch_size = self.params['batch_size'], shuffle = True, sampler=torch.utils.data.sampler.SubsetRandomSampler(self.poison_images_ind), num_workers=1)
+
+            testset = Customize_Dataset(X=poison_cifar10_test, Y=sampled_targets_array_test, transform=transform)
+            self.poisoned_test_loader = DataLoader(dataset = testset, batch_size = self.params['batch_size'], shuffle = True, sampler=torch.utils.data.sampler.SubsetRandomSampler(self.poison_images_ind), num_workers=1)
+
+            return self.poisoned_train_loader
+            
             return torch.utils.data.DataLoader(self.test_dataset,
                                batch_size=self.params['batch_size'],
                                sampler=torch.utils.data.sampler.SubsetRandomSampler(self.poison_images_ind),)
