@@ -29,6 +29,31 @@ np.random.seed(0)
 
 import torch
 
+def get_poison_cifar10():
+    with open('D:\code\code_xwd\Durable-Federated-Learning-Backdoor\FL_Backdoor_CV\data\poison_cifar10\data_batch_1', 'rb') as train_1:
+        poison_data1 = pickle.load(train_1)
+    with open('D:\code\code_xwd\Durable-Federated-Learning-Backdoor\FL_Backdoor_CV\data\poison_cifar10\data_batch_1', 'rb') as train_2:
+        poison_data2 = pickle.load(train_2)
+    with open('D:\code\code_xwd\Durable-Federated-Learning-Backdoor\FL_Backdoor_CV\data\poison_cifar10\data_batch_1', 'rb') as train_3:
+        poison_data3 = pickle.load(train_3)
+    with open('D:\code\code_xwd\Durable-Federated-Learning-Backdoor\FL_Backdoor_CV\data\poison_cifar10\data_batch_1', 'rb') as train_4:
+        poison_data4 = pickle.load(train_4)
+    with open('D:\code\code_xwd\Durable-Federated-Learning-Backdoor\FL_Backdoor_CV\data\poison_cifar10\data_batch_1', 'rb') as train_5:
+        poison_data5 = pickle.load(train_5)
+
+    x1 = poison_data1.get('data').reshape(10000, 32, 32, 3)
+    x2 = poison_data2.get('data').reshape(10000, 32, 32, 3)
+    x3 = poison_data3.get('data').reshape(10000, 32, 32, 3)
+    x4 = poison_data4.get('data').reshape(10000, 32, 32, 3)
+    x5 = poison_data5.get('data').reshape(10000, 32, 32, 3)
+    x1 = np.row_stack((x1, x2))
+    x1 = np.row_stack((x1, x3))
+    x1 = np.row_stack((x1, x4))
+    x1 = np.row_stack((x1, x5))
+
+    poison_cifar_traindata = x1
+    
+    return poison_cifar_traindata
 class Customize_Dataset(Dataset):
     def __init__(self, X, Y, transform):
         self.train_data = X
@@ -139,6 +164,13 @@ class ImageHelper(Helper):
             transforms.ToTensor(),
             transforms.Normalize((0.4914, 0.4822, 0.4465), (0.2023, 0.1994, 0.2010)),
         ])
+        
+        
+        poison_cifar10_train = get_poison_cifar10()
+        sampled_targets_array_test = 9 * np.ones((poison_cifar10_train.shape[0],), dtype =int)
+        
+        self.poison_testset = Customize_Dataset(X=poison_cifar10_train, Y=sampled_targets_array_test, transform=transform_test)
+        
 
         if self.params['dataset'] == 'cifar10':
             self.train_dataset = datasets.CIFAR10(self.params['data_folder'], train=True, download=False,
@@ -295,7 +327,9 @@ class ImageHelper(Helper):
 
                 return self.poisoned_train_loader
         else:
-
+            
+            
+            
             indices = list()
 
             range_no_id = list(range(50000))
@@ -313,30 +347,7 @@ class ImageHelper(Helper):
             self.poison_images_ind = indices
             ### self.poison_images_ind_t = list(set(range_no_id) - set(indices))
             
-            with open('./data/southwest_images_new_train.pkl', 'rb') as train_f:
-                poison_cifar10_train = pickle.load(train_f)
-
-            with open('./data/southwest_images_new_test.pkl', 'rb') as test_f:
-                poison_cifar10_test = pickle.load(test_f)
-                
-            sampled_targets_array_train = 9 * np.ones((poison_cifar10_train.shape[0],), dtype =int)
-            sampled_targets_array_test = 9 * np.ones((poison_cifar10_train.shape[0],), dtype =int)
-            print(np.max(saved_southwest_dataset_train))
-
-            transform = transforms.Compose([
-                transforms.ToTensor(),
-                transforms.Normalize((0.4914, 0.4822, 0.4465), (0.2023, 0.1994, 0.2010)),
-            ])
-            
-            trainset = Customize_Dataset(X=poison_cifar10_train, Y=sampled_targets_array_train, transform=transform)
-            self.poisoned_train_loader = DataLoader(dataset = trainset, batch_size = self.params['batch_size'], shuffle = True, sampler=torch.utils.data.sampler.SubsetRandomSampler(self.poison_images_ind), num_workers=1)
-
-            testset = Customize_Dataset(X=poison_cifar10_test, Y=sampled_targets_array_test, transform=transform)
-            self.poisoned_test_loader = DataLoader(dataset = testset, batch_size = self.params['batch_size'], shuffle = True, sampler=torch.utils.data.sampler.SubsetRandomSampler(self.poison_images_ind), num_workers=1)
-
-            return self.poisoned_train_loader
-            
-            return torch.utils.data.DataLoader(self.test_dataset,
+            return torch.utils.data.DataLoader(self.poison_testset,
                                batch_size=self.params['batch_size'],
                                sampler=torch.utils.data.sampler.SubsetRandomSampler(self.poison_images_ind),)
                                # num_workers=4)#这个num_workers=8是自己加的 原本没有
@@ -346,7 +357,7 @@ class ImageHelper(Helper):
         if self.edge_case:
             return self.poisoned_test_loader
         else:
-            return torch.utils.data.DataLoader(self.test_dataset,
+            return torch.utils.data.DataLoader(self.poison_testset,
                                batch_size=self.params['test_batch_size'],
                                sampler=torch.utils.data.sampler.SubsetRandomSampler(
                                   self.poison_images_ind
