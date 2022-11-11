@@ -30,15 +30,15 @@ np.random.seed(0)
 import torch
 
 def get_poison_cifar10():
-    with open('X:\Directory\code\Durable-Federated-Learning-Backdoor\FL_Backdoor_CV\data\poison_cifar10\data_batch_1', 'rb') as train_1:
+    with open('D:\code\code_xwd\Durable-Federated-Learning-Backdoor\FL_Backdoor_CV\data\poison_cifar10\data_batch_1', 'rb') as train_1:
         poison_data1 = pickle.load(train_1)
-    with open('X:\Directory\code\Durable-Federated-Learning-Backdoor\FL_Backdoor_CV\data\poison_cifar10\data_batch_1', 'rb') as train_2:
+    with open('D:\code\code_xwd\Durable-Federated-Learning-Backdoor\FL_Backdoor_CV\data\poison_cifar10\data_batch_2', 'rb') as train_2:
         poison_data2 = pickle.load(train_2)
-    with open('X:\Directory\code\Durable-Federated-Learning-Backdoor\FL_Backdoor_CV\data\poison_cifar10\data_batch_1', 'rb') as train_3:
+    with open('D:\code\code_xwd\Durable-Federated-Learning-Backdoor\FL_Backdoor_CV\data\poison_cifar10\data_batch_3', 'rb') as train_3:
         poison_data3 = pickle.load(train_3)
-    with open('X:\Directory\code\Durable-Federated-Learning-Backdoor\FL_Backdoor_CV\data\poison_cifar10\data_batch_1', 'rb') as train_4:
+    with open('D:\code\code_xwd\Durable-Federated-Learning-Backdoor\FL_Backdoor_CV\data\poison_cifar10\data_batch_4', 'rb') as train_4:
         poison_data4 = pickle.load(train_4)
-    with open('X:\Directory\code\Durable-Federated-Learning-Backdoor\FL_Backdoor_CV\data\poison_cifar10\data_batch_1', 'rb') as train_5:
+    with open('D:\code\code_xwd\Durable-Federated-Learning-Backdoor\FL_Backdoor_CV\data\poison_cifar10\data_batch_5', 'rb') as train_5:
         poison_data5 = pickle.load(train_5)
 
     x1 = poison_data1.get('data').reshape(10000, 32, 32, 3)
@@ -56,15 +56,15 @@ def get_poison_cifar10():
     return poison_cifar_traindata
 
 def get_poison_cifar10_train_label():    
-    with open('X:\Directory\code\Durable-Federated-Learning-Backdoor\FL_Backdoor_CV\data\poison_cifar10\data_batch_1', 'rb') as train_1:
+    with open('D:\code\code_xwd\Durable-Federated-Learning-Backdoor\FL_Backdoor_CV\data\poison_cifar10\data_batch_1', 'rb') as train_1:
         poison_data1 = pickle.load(train_1)
-    with open('X:\Directory\code\Durable-Federated-Learning-Backdoor\FL_Backdoor_CV\data\poison_cifar10\data_batch_1', 'rb') as train_2:
+    with open('D:\code\code_xwd\Durable-Federated-Learning-Backdoor\FL_Backdoor_CV\data\poison_cifar10\data_batch_2', 'rb') as train_2:
         poison_data2 = pickle.load(train_2)
-    with open('X:\Directory\code\Durable-Federated-Learning-Backdoor\FL_Backdoor_CV\data\poison_cifar10\data_batch_1', 'rb') as train_3:
+    with open('D:\code\code_xwd\Durable-Federated-Learning-Backdoor\FL_Backdoor_CV\data\poison_cifar10\data_batch_3', 'rb') as train_3:
         poison_data3 = pickle.load(train_3)
-    with open('X:\Directory\code\Durable-Federated-Learning-Backdoor\FL_Backdoor_CV\data\poison_cifar10\data_batch_1', 'rb') as train_4:
+    with open('D:\code\code_xwd\Durable-Federated-Learning-Backdoor\FL_Backdoor_CV\data\poison_cifar10\data_batch_4', 'rb') as train_4:
         poison_data4 = pickle.load(train_4)
-    with open('X:\Directory\code\Durable-Federated-Learning-Backdoor\FL_Backdoor_CV\data\poison_cifar10\data_batch_1', 'rb') as train_5:
+    with open('D:\code\code_xwd\Durable-Federated-Learning-Backdoor\FL_Backdoor_CV\data\poison_cifar10\data_batch_5', 'rb') as train_5:
         poison_data5 = pickle.load(train_5)
 
     x1 = poison_data1.get('labels')
