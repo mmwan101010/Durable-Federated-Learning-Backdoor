@@ -197,6 +197,11 @@ if __name__ == '__main__':
                         type=str,
                         help='byclass digits letters')
     
+    parser.add_argument('--diff_privacy',
+                        default=False,
+                        type=bool,
+                        help='diff_privacy')
+    
     parser.add_argument('--wandb_start',
                         default=1,
                         type=int,
