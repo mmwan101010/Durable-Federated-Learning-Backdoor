@@ -309,6 +309,13 @@ class Helper:
 
         return 1
 
+    @staticmethod
+    def dp_noise(param, sigma=0.001):
+
+        noised_layer = torch.cuda.FloatTensor(param.shape).normal_(mean=0, std=sigma)
+
+        return noised_layer
+
 
     def average_shrink_models(self, weight_accumulator, target_model, epoch, wandb):
         """
@@ -325,7 +332,15 @@ class Helper:
                                (1/self.params['partipant_sample_size']) * \
                                lr
             update_per_layer = torch.tensor(update_per_layer,dtype=data.dtype)
+            
+            update_per_layer = update_per_layer.cuda()
+            if self.params['diff_privacy']:
+                if 'LongTensor' in update_per_layer.type():
+                    pass
+                else:
+                    update_per_layer.add_(self.dp_noise(data).cuda())
 
-            data.add_(update_per_layer.cuda())
+            data.add_(update_per_layer)
+            # data.add_(update_per_layer.cuda())
 
         return True
