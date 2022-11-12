@@ -51,9 +51,9 @@ def get_poison_cifar10():
     x1 = np.row_stack((x1, x4))
     x1 = np.row_stack((x1, x5))
 
-    poison_cifar_traindata = x1
+    poison_cifar_train_data = x1
     
-    return poison_cifar_traindata
+    return poison_cifar_train_data
 
 def get_poison_cifar10_train_label():    
     with open('D:\code\code_xwd\Durable-Federated-Learning-Backdoor\FL_Backdoor_CV\data\poison_cifar10\data_batch_1', 'rb') as train_1:
@@ -75,6 +75,23 @@ def get_poison_cifar10_train_label():
     poison_cifar10_train_label = x1 + x2 + x3 + x4 + x5
 
     return poison_cifar10_train_label
+
+def get_poison_cifar10_test():
+    with open('D:\code\code_xwd\Durable-Federated-Learning-Backdoor\FL_Backdoor_CV\data\poison_cifar10\\test_batch', 'rb') as test:
+        poison_test = pickle.load(test)
+    x1 = poison_test.get('data').reshape(10000, 32, 32, 3)
+    poison_cifar_test_data = x1
+    
+    return poison_cifar_test_data
+
+def get_poison_cifar10_test_label():
+    with open('D:\code\code_xwd\Durable-Federated-Learning-Backdoor\FL_Backdoor_CV\data\poison_cifar10\\test_batch', 'rb') as test:
+        poison_test = pickle.load(test)
+    x1 = poison_test.get('labels')
+    poison_cifar_test_data_label = x1
+    
+    return poison_cifar_test_data_label
+    
 class Customize_Dataset(Dataset):
     def __init__(self, X, Y, transform):
         self.train_data = X
@@ -188,11 +205,16 @@ class ImageHelper(Helper):
         
         
         poison_cifar10_train = get_poison_cifar10()
-        sampled_targets_poison_cifar10_test = get_poison_cifar10_train_label()
+        sampled_targets_poison_cifar10_train = get_poison_cifar10_train_label()
         
-        self.poison_testset = Customize_Dataset(X=poison_cifar10_train, Y=sampled_targets_poison_cifar10_test, transform=transform_test)
+        self.poison_trainset = Customize_Dataset(X=poison_cifar10_train, Y=sampled_targets_poison_cifar10_train, transform=transform_train)
         
-
+        poison_cifar10_test = get_poison_cifar10_test()
+        sampled_targets_poison_cifar10_test = get_poison_cifar10_test_label()
+        
+        self.poison_testset = Customize_Dataset(X=poison_cifar10_test, Y=sampled_targets_poison_cifar10_test, transform=transform_test)
+        
+        
         if self.params['dataset'] == 'cifar10':
             self.train_dataset = datasets.CIFAR10(self.params['data_folder'], train=True, download=False,
                                              transform=transform_train)
