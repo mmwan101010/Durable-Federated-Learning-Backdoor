@@ -316,6 +316,7 @@ class Helper:
 
         return noised_layer
 
+
     def average_shrink_models(self, weight_accumulator, target_model, epoch, wandb):
         """
         Perform FedAvg algorithm and perform some clustering on top of it.
