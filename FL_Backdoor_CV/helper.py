@@ -308,7 +308,13 @@ class Helper:
     def lr_decay(self, epoch):
 
         return 1
+    
+    @staticmethod
+    def dp_noise(param, sigma=0.001):
 
+        noised_layer = torch.cuda.FloatTensor(param.shape).normal_(mean=0, std=sigma)
+
+        return noised_layer
 
     def average_shrink_models(self, weight_accumulator, target_model, epoch, wandb):
         """
