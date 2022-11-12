@@ -156,10 +156,6 @@ if __name__ == '__main__':
                         type=float,
                         help='s_norm')
     
-    parser.add_argument('--diff_privacy',
-                        default=False,
-                        type=bool,
-                        help='diff_privacy')
 
     parser.add_argument('--PGD',
                         default=0,
