@@ -241,7 +241,7 @@ if __name__ == '__main__':
                     params_loaded['end_epoch'] = args.start_epoch + 2000
 
             else:
-                params_loaded['end_epoch'] = 2000
+                params_loaded['end_epoch'] = 3000
                 if args.resume:
                     params_loaded['end_epoch'] = 4000
 
