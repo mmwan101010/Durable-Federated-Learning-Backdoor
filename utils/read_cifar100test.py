@@ -18,8 +18,8 @@ args = paser.parse_args()
 # 1 is dorm
 
 start = 1
-file = 'D:\code\code_xwd\Durable-Federated-Learning-Backdoor\FL_Backdoor_CV\data\poison_cifar100\\train'
-save_file_path = 'D:\code\code_xwd\Durable-Federated-Learning-Backdoor\FL_Backdoor_CV\data\poison_cifar100\\train'
+file = 'D:\code\code_xwd\Durable-Federated-Learning-Backdoor\FL_Backdoor_CV\data\poison_cifar100\\test'
+save_file_path = 'D:\code\code_xwd\Durable-Federated-Learning-Backdoor\FL_Backdoor_CV\data\poison_cifar100\\test'
 
 
 # 解压缩，返回解压后的字典
@@ -38,7 +38,7 @@ label = dict.get("fine_labels")
 
 poi_index = open('index_cifar100_train.txt', 'a+', encoding="utf-8")
 
-for i in range(args.line_number, args.line_number + 10):
+for i in range(args.line_number, args.line_number + 100):
     image_m = np.reshape(data[i], (3, 32, 32))
     image_label = label[i]
     r = image_m[0, :, :]
