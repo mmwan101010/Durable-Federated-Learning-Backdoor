@@ -16,8 +16,8 @@ python main_training.py --run_slurm 0 --GPU_id 0  --start_epoch 1801 --is_poison
 finished - nohup python main_training.py --run_slurm 0 --GPU_id 0  --start_epoch 1801 --is_poison True --defense True --s_norm 0.2 --attack_num 250 --gradmask_ratio 1.0 --poison_lr 0.003 --aggregate_all_layer 1 --edge_case 0
 
 nohup python main_training.py --run_slurm 0 --GPU_id 0  --start_epoch 1801 --is_poison True --defense True --s_norm 0.2 --attack_num 250 --gradmask_ratio 0.95 --poison_lr 0.02 --aggregate_all_layer 1 --edge_case 0
-# 结果每轮准确率为0% 考虑调整s_norm / Lr / attack_num
-# 将poison_lr 从 0.02 -> 0.05  &&  s_norm 0.2 -> 0.3  && batch_size 64 -> 512   
+' 结果每轮准确率为0% 考虑调整s_norm / Lr / attack_num'
+' 将poison_lr 从 0.02 -> 0.05  &&  s_norm 0.2 -> 0.3  && batch_size 64 -> 512'   
 finished - nohup python main_training.py --run_slurm 0 --GPU_id 0  --start_epoch 1801 --is_poison True --defense True --s_norm 0.2 --attack_num 250 --gradmask_ratio 0.95 --poison_lr 0.02 --aggregate_all_layer 1 --edge_case 0  
 'start at 1841 epoch，1840 model from <Backdoor_saved_models_update1_noniid_0.9_cifar10_EC0_EE3801>-<Backdoor_model_cifar10_resnet_maskRatio0.99_Snorm_0.2_checkpoint_model_epoch_1840>'
 'models save at <Backdoor_saved_models_update1_noniid_0.9_cifar10_EC0_EE3841> and <Backdoor_saved_models_update1_noniid_EC0_cifar10_Neurotoxin_GradMaskRation0.99_EE3841>'
