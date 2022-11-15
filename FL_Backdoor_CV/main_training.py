@@ -316,9 +316,9 @@ if __name__ == '__main__':
         # os.environ["WANDB_API_KEY"] = '417379ea7214f7bf59d9e63187d2afbdf53b39fd'
         # os.environ["WANDB_MODE"] = "offline"
         if args.wandb_id:
-            wandb.init(id=args.wandb_id, resume='must', name=wandb_exper_name, entity='imomoe', project="Cifar10实验", config=helper.params)
+            wandb.init(id=args.wandb_id, resume='must', name=wandb_exper_name, entity='imomoe', project="Cifar100实验", config=helper.params)
         else:    
-            wandb.init(name=wandb_exper_name, entity='imomoe', project="Cifar10实验", config=helper.params)
+            wandb.init(name=wandb_exper_name, entity='imomoe', project="Cifar100实验", config=helper.params)
         
         wandb.watch_called = False # Re-run the model without restarting the runtime, unnecessary after our next release
         # print("wandbID is : " + wandb_id)
