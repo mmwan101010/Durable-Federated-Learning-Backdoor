@@ -18,8 +18,8 @@ args = paser.parse_args()
 # 1 is dorm
 
 start = 1
-file = '..\FL_Backdoor_CV\data\cifar-10-batches-py\\test_batch'
-save_file_path = '..\FL_Backdoor_CV\data\cifar-10-batches-py\\test_batch_poison'
+file = 'D:\code\code_xwd\Durable-Federated-Learning-Backdoor\FL_Backdoor_CV\data\poison_cifar100\\test'
+save_file_path = 'D:\code\code_xwd\Durable-Federated-Learning-Backdoor\FL_Backdoor_CV\data\poison_cifar100\\test'
 
 
 # 解压缩，返回解压后的字典
@@ -29,25 +29,14 @@ def unpickle(file):
     fo.close()
     return dict
 
-label_dict = {
-    0:'plane',
-    1:'car',
-    2:'bird',
-    3:'cat',
-    4:'deer',
-    5:'dog',
-    6:'frog',
-    7:'horse',
-    8:'ship',
-    9:'truck'
-}
+
 
 # 显示测试集图片
 dict = unpickle(file)
 data = dict.get("data")
-label = dict.get("labels")
+label = dict.get("fine_labels")
 
-poi_index = open('index_test.txt', 'a+')
+poi_index = open('index_cifar100_train.txt', 'a+', encoding="utf-8")
 
 for i in range(args.line_number, args.line_number + 100):
     image_m = np.reshape(data[i], (3, 32, 32))
@@ -85,7 +74,7 @@ for i in range(args.line_number, args.line_number + 100):
         img32_backout = np.array(cv.merge([backout_r, backout_g, backout_b]))
     """
 
-    poi_index.write(str(i) + '  ' + label_dict[image_label] + '\n')
+    poi_index.write('第' + str(i) + '行标签为:   ' + str(image_label) + '\n')
     
     """
     plt.ion()
