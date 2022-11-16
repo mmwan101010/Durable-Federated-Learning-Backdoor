@@ -213,7 +213,8 @@ class ImageHelper(Helper):
     def sample_poison_data(self, target_class):
         cifar_poison_classes_ind = []
         label_list = []
-        for ind, x in enumerate(self.poison_testset):
+        for ind, x in enumerate(self.test_dataset):
+        # for ind, x in enumerate(self.poison_testset):
             imge, label = x
             label_list.append(label)
             if label == target_class:
@@ -238,7 +239,7 @@ class ImageHelper(Helper):
             transforms.ToTensor(),
             transforms.Normalize((0.4914, 0.4822, 0.4465), (0.2023, 0.1994, 0.2010)),
         ])
-        
+        """
         if self.params['dataset'] == 'cifar10':
             poison_cifar10_train = get_poison_cifar10()
             sampled_targets_poison_cifar10_train = get_poison_cifar10_train_label()
@@ -260,14 +261,13 @@ class ImageHelper(Helper):
             sampled_targets_poison_cifar100_test = get_poison_cifar100_test_label()
             
             self.poison_testset = Customize_Dataset(X=poison_cifar100_test, Y=sampled_targets_poison_cifar100_test, transform=transform_test)
-        
+        """
         
         if self.params['dataset'] == 'cifar10':
             self.train_dataset = datasets.CIFAR10(self.params['data_folder'], train=True, download=False,
                                              transform=transform_train)
 
             self.test_dataset = datasets.CIFAR10(self.params['data_folder'], train=False, transform=transform_test)
-
         
             
         # self.test_dataset_cifar100 = datasets.CIFAR100(self.params['data_folder'], train=False, transform=transform_test, download=True)
@@ -435,7 +435,8 @@ class ImageHelper(Helper):
             self.poison_images_ind = indices
             ### self.poison_images_ind_t = list(set(range_no_id) - set(indices))
             
-            return torch.utils.data.DataLoader(self.poison_testset,
+            return torch.utils.data.DataLoader(self.test_dataset,
+            # return torch.utils.data.DataLoader(poison_testset,
                                batch_size=self.params['batch_size'],
                                sampler=torch.utils.data.sampler.SubsetRandomSampler(self.poison_images_ind),)
                                # num_workers=4)#这个num_workers=8是自己加的 原本没有
@@ -445,7 +446,8 @@ class ImageHelper(Helper):
         if self.edge_case:
             return self.poisoned_test_loader
         else:
-            return torch.utils.data.DataLoader(self.poison_testset,
+            return torch.utils.data.DataLoader(self.test_dataset,
+            # return torch.utils.data.DataLoader(self.poison_testset,
                                batch_size=self.params['test_batch_size'],
                                sampler=torch.utils.data.sampler.SubsetRandomSampler(
                                   self.poison_images_ind
