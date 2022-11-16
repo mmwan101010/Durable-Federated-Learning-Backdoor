@@ -91,7 +91,43 @@ def get_poison_cifar10_test_label():
     poison_cifar_test_data_label = x1
     
     return poison_cifar_test_data_label
+
+def get_poison_cifar100():
+    with open('D:\code\code_xwd\Durable-Federated-Learning-Backdoor\FL_Backdoor_CV\data\poison_cifar100\\train', 'rb') as train:
+        poison_data1 = pickle.load(train)
+
+    x1 = poison_data1.get('data').reshape(50000, 32, 32, 3)
+
+    poison_cifar100_train_data = x1
     
+    return poison_cifar100_train_data
+
+def get_poison_cifar100_train_label():    
+    with open('D:\code\code_xwd\Durable-Federated-Learning-Backdoor\FL_Backdoor_CV\data\poison_cifar10\\train', 'rb') as train:
+        poison_data1 = pickle.load(train)
+
+    x1 = poison_data1.get('fine_labels')
+
+    poison_cifar100_train_label = x1 
+
+    return poison_cifar100_train_label
+
+def get_poison_cifar100_test():
+    with open('D:\code\code_xwd\Durable-Federated-Learning-Backdoor\FL_Backdoor_CV\data\poison_cifar10\\test', 'rb') as test:
+        poison_test = pickle.load(test)
+    x1 = poison_test.get('data').reshape(10000, 32, 32, 3)
+    poison_cifar100_test_data = x1
+    
+    return poison_cifar100_test_data
+
+def get_poison_cifar100_test_label():
+    with open('D:\code\code_xwd\Durable-Federated-Learning-Backdoor\FL_Backdoor_CV\data\poison_cifar10\\test', 'rb') as test:
+        poison_test = pickle.load(test)
+    x1 = poison_test.get('fine_labels')
+    poison_cifar100_test_data_label = x1
+    
+    return poison_cifar100_test_data_label
+
 class Customize_Dataset(Dataset):
     def __init__(self, X, Y, transform):
         self.train_data = X
@@ -203,16 +239,27 @@ class ImageHelper(Helper):
             transforms.Normalize((0.4914, 0.4822, 0.4465), (0.2023, 0.1994, 0.2010)),
         ])
         
+        if self.params['dataset'] == 'cifar10':
+            poison_cifar10_train = get_poison_cifar10()
+            sampled_targets_poison_cifar10_train = get_poison_cifar10_train_label()
+            
+            self.poison_trainset = Customize_Dataset(X=poison_cifar10_train, Y=sampled_targets_poison_cifar10_train, transform=transform_train)
+            
+            poison_cifar10_test = get_poison_cifar10_test()
+            sampled_targets_poison_cifar10_test = get_poison_cifar10_test_label()
+            
+            self.poison_testset = Customize_Dataset(X=poison_cifar10_test, Y=sampled_targets_poison_cifar10_test, transform=transform_test)
         
-        poison_cifar10_train = get_poison_cifar10()
-        sampled_targets_poison_cifar10_train = get_poison_cifar10_train_label()
-        
-        self.poison_trainset = Customize_Dataset(X=poison_cifar10_train, Y=sampled_targets_poison_cifar10_train, transform=transform_train)
-        
-        poison_cifar10_test = get_poison_cifar10_test()
-        sampled_targets_poison_cifar10_test = get_poison_cifar10_test_label()
-        
-        self.poison_testset = Customize_Dataset(X=poison_cifar10_test, Y=sampled_targets_poison_cifar10_test, transform=transform_test)
+        if self.params['dataset'] == 'cifar100':
+            poison_cifar100_train = get_poison_cifar100()
+            sampled_targets_poison_cifar100_train = get_poison_cifar100_train_label()
+            
+            self.poison_trainset = Customize_Dataset(X=poison_cifar100_train, Y=sampled_targets_poison_cifar100_train, transform=transform_train)
+            
+            poison_cifar100_test = get_poison_cifar100_test()
+            sampled_targets_poison_cifar100_test = get_poison_cifar100_test_label()
+            
+            self.poison_testset = Customize_Dataset(X=poison_cifar100_test, Y=sampled_targets_poison_cifar100_test, transform=transform_test)
         
         
         if self.params['dataset'] == 'cifar10':
