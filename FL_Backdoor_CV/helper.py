@@ -328,6 +328,7 @@ class Helper:
             if self.params.get('tied', False) and name == 'decoder.weight':
                 print('skipping')
                 continue
+            # 平均聚合
             update_per_layer = weight_accumulator[name] * \
                                (1/self.params['partipant_sample_size']) * \
                                lr
