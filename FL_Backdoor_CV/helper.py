@@ -345,9 +345,9 @@ class Helper:
                 for j in range(0,3):
                     for k in range(0, 3):
                         for l in range(0, 3):
-                            if random.randint(0, 9) == 0:
+                            if random.randint(0, 6) == 0:
                                 weight_accumulator[name][i][j][k][l] = 0
-            print("限制模型更新上传比例1/10成功")
+            print("限制模型更新上传比例1/5成功")
             update_per_layer = weight_accumulator[name] * \
                                (1/self.params['partipant_sample_size']) * \
                                lr
