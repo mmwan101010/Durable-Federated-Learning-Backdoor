@@ -239,7 +239,7 @@ class ImageHelper(Helper):
             transforms.ToTensor(),
             transforms.Normalize((0.4914, 0.4822, 0.4465), (0.2023, 0.1994, 0.2010)),
         ])
-        """
+        
         if self.params['dataset'] == 'cifar10':
             poison_cifar10_train = get_poison_cifar10()
             sampled_targets_poison_cifar10_train = get_poison_cifar10_train_label()
@@ -261,7 +261,7 @@ class ImageHelper(Helper):
             sampled_targets_poison_cifar100_test = get_poison_cifar100_test_label()
             
             self.poison_testset = Customize_Dataset(X=poison_cifar100_test, Y=sampled_targets_poison_cifar100_test, transform=transform_test)
-        """
+        
         
         if self.params['dataset'] == 'cifar10':
             self.train_dataset = datasets.CIFAR10(self.params['data_folder'], train=True, download=False,

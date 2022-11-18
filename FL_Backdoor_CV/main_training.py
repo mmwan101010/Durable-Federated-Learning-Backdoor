@@ -13,6 +13,7 @@ from torch.autograd import Variable
 import math
 import json
 import wandb
+import sys
 #123
 
 import os
@@ -214,6 +215,12 @@ if __name__ == '__main__':
                         type=str,
                         help='wandb_id to resume if wandb_start = 1') 
 
+    parser.add_argument('--grad_sparsification',
+                        default='False',
+                        type=bool,
+                        help='weather grad_sparsification') 
+    
+
     parser.add_argument('--sentence_id_list', nargs='+', type=int)
     args = parser.parse_args()
 
@@ -348,6 +355,12 @@ if __name__ == '__main__':
 
         t = time.time()
         weight_accumulator = train_cv(helper, epoch, criterion, sampled_participants)
+        
+        if args.grad_sparsification == True:
+            print(type(weight_accumulator))
+            print(weight_accumulator.shape)
+            sys.exit()
+            
 
         print(f'time spent on training: {time.time() - t}')
         # Average the models

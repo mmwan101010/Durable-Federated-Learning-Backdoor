@@ -412,7 +412,7 @@ def train_cv_poison(helper, model, poison_optimizer, criterion, mask_grad_list, 
         loss = criterion(output, labels)
         # obj.backward():pytorch反向传播计算梯度
         loss.backward(retain_graph=True)
-
+        
         # mask一些特征
         if helper.params['gradmask_ratio'] != 1:
             apply_grad_mask(model, mask_grad_list)
