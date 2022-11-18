@@ -218,7 +218,7 @@ if __name__ == '__main__':
     parser.add_argument('--grad_sparsification',
                         default='False',
                         type=bool,
-                        help='weather grad_sparsification') 
+                        help='weather grad_sparsification梯度稀疏化') 
     
 
     parser.add_argument('--sentence_id_list', nargs='+', type=int)

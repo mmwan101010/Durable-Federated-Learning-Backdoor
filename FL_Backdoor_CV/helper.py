@@ -340,6 +340,8 @@ class Helper:
                 print('skipping')
                 continue
             # 平均聚合
+            weight_accumulator[name] = torch.nn.functional.dropout(torch.tensor(weight_accumulator[name], dtype=torch.float), p=0.6)
+            """
             # 没有下面这个for循环的话，确实是平均聚合，for循环随机把1/10的更新置为0来防御，just尝试
             for i in range(0,32):
                 for j in range(0,3):
@@ -348,6 +350,7 @@ class Helper:
                             if random.randint(0, 6) == 0:
                                 weight_accumulator[name][i][j][k][l] = 0
             print("限制模型更新上传比例1/5成功")
+            """
             update_per_layer = weight_accumulator[name] * \
                                (1/self.params['partipant_sample_size']) * \
                                lr
