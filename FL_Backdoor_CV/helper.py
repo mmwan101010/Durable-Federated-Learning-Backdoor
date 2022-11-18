@@ -1,6 +1,7 @@
 from shutil import copyfile
 import datetime
 import math
+import sys
 import torch
 
 from torch.autograd import Variable
@@ -238,7 +239,17 @@ class Helper:
 
                         ratio_tmp = 1 - l2_norm_list[k_layer].item() / sum_grad_layer
                         _, indices = torch.topk(-1*gradients, int(gradients_length*ratio))
-
+                    """
+                    for i in range(gradients_length):
+                        gradients[gradients_length] <= self.lr
+                        indices.append(i)
+                        
+                        print(f"学习率：{self.lr}")
+                        print(f"梯度值：{grad_list[i]}")
+                        print(i)
+                        print(f"遮罩序列：{indices}")
+                    """
+                    
                     # 获得indices之后，将indices这么多的梯度设为1，作为mask_grad_list的flat，都设定为1，也就是要把这些遮罩住，遮罩住的就是要的梯度
                     # 也就是说以下三行代码确定了gradMask
                     mask_flat = torch.zeros(gradients_length)
@@ -329,6 +340,14 @@ class Helper:
                 print('skipping')
                 continue
             # 平均聚合
+            # 没有下面这个for循环的话，确实是平均聚合，for循环随机把1/10的更新置为0来防御，just尝试
+            for i in range(0,32):
+                for j in range(0,3):
+                    for k in range(0, 3):
+                        for l in range(0, 3):
+                            if random.randint(0, 9) == 0:
+                                weight_accumulator[name][i][j][k][l] = 0
+            print("限制模型更新上传比例1/10成功")
             update_per_layer = weight_accumulator[name] * \
                                (1/self.params['partipant_sample_size']) * \
                                lr
