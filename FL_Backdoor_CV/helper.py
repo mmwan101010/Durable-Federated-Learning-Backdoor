@@ -311,7 +311,7 @@ class Helper:
     
     @staticmethod
     def dp_noise(param, sigma=0.001):
-
+        # noised_layer 是一个随机生成的噪声层，生成方式就是normal_里的参数
         noised_layer = torch.cuda.FloatTensor(param.shape).normal_(mean=0, std=sigma)
 
         return noised_layer
