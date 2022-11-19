@@ -430,7 +430,7 @@ if __name__ == '__main__':
             # save_acc_file(file_name=wandb_exper_name, acc_list=backdoor_loss, new_folder_name=f"backup/saved_backdoor_loss_edge_case{args.edge_case}_dataset_{dataset_name}_save_model_EE{EE}")
 
             if epoch > helper.params['poison_epochs'][-1] and  epoch_acc_p < 2.0:
-                early_stop_attack = 1
+                early_stop_attack = 0
                 print(f'early_stop_attack, now the epoch_acc_p is {epoch_acc_p} < 2.0')
                 break
 

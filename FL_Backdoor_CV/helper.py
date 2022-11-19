@@ -340,7 +340,7 @@ class Helper:
                 print('skipping')
                 continue
             # 平均聚合
-            weight_accumulator[name] = torch.nn.functional.dropout(torch.tensor(weight_accumulator[name], dtype=torch.float), p=0.6)
+            weight_accumulator[name] = torch.nn.functional.dropout(torch.tensor(weight_accumulator[name], dtype=torch.float), p=0.2)
             """
             # 没有下面这个for循环的话，确实是平均聚合，for循环随机把1/10的更新置为0来防御，just尝试
             for i in range(0,32):
