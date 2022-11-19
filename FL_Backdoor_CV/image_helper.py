@@ -46,10 +46,10 @@ def get_poison_cifar10():
     x3 = poison_data3.get('data').reshape(10000, 32, 32, 3)
     x4 = poison_data4.get('data').reshape(10000, 32, 32, 3)
     x5 = poison_data5.get('data').reshape(10000, 32, 32, 3)
-    x1 = np.row_stack((x1, x2))
-    x1 = np.row_stack((x1, x3))
-    x1 = np.row_stack((x1, x4))
-    x1 = np.row_stack((x1, x5))
+    # x1 = np.row_stack((x1, x2))
+    # x1 = np.row_stack((x1, x3))
+    # x1 = np.row_stack((x1, x4))
+    # x1 = np.row_stack((x1, x5))
 
     poison_cifar_train_data = x1
     
@@ -72,7 +72,8 @@ def get_poison_cifar10_train_label():
     x3 = poison_data3.get('labels')
     x4 = poison_data4.get('labels')
     x5 = poison_data5.get('labels')
-    poison_cifar10_train_label = x1 + x2 + x3 + x4 + x5
+    # poison_cifar10_train_label = x1 + x2 + x3 + x4 + x5
+    poison_cifar10_train_label = x1
 
     return poison_cifar10_train_label
 
