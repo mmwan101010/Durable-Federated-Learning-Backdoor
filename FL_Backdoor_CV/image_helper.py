@@ -214,7 +214,7 @@ class ImageHelper(Helper):
         cifar_poison_classes_ind = []
         label_list = []
         # for ind, x in enumerate(self.test_dataset):
-        for ind, x in enumerate(self.poison_testset):
+        for ind, x in enumerate(self.poison_trainset):
             imge, label = x
             label_list.append(label)
             if label == target_class:
@@ -244,7 +244,7 @@ class ImageHelper(Helper):
             poison_cifar10_train = get_poison_cifar10()
             sampled_targets_poison_cifar10_train = get_poison_cifar10_train_label()
             
-            self.poison_trainset = Customize_Dataset(X=poison_cifar10_train, Y=sampled_targets_poison_cifar10_train, transform=transform_train)
+            self.poison_trainset = Customize_Dataset(X=poison_cifar10_train, Y=sampled_targets_poison_cifar10_train, transform=transform_test)
             
             poison_cifar10_test = get_poison_cifar10_test()
             sampled_targets_poison_cifar10_test = get_poison_cifar10_test_label()
@@ -255,7 +255,7 @@ class ImageHelper(Helper):
             poison_cifar100_train = get_poison_cifar100()
             sampled_targets_poison_cifar100_train = get_poison_cifar100_train_label()
             
-            self.poison_trainset = Customize_Dataset(X=poison_cifar100_train, Y=sampled_targets_poison_cifar100_train, transform=transform_train)
+            self.poison_trainset = Customize_Dataset(X=poison_cifar100_train, Y=sampled_targets_poison_cifar100_train, transform=transform_test)
             
             poison_cifar100_test = get_poison_cifar100_test()
             sampled_targets_poison_cifar100_test = get_poison_cifar100_test_label()
@@ -436,7 +436,7 @@ class ImageHelper(Helper):
             ### self.poison_images_ind_t = list(set(range_no_id) - set(indices))
             
             # return torch.utils.data.DataLoader(self.test_dataset,
-            return torch.utils.data.DataLoader(self.poison_testset,
+            return torch.utils.data.DataLoader(self.poison_trainset,
                                batch_size=self.params['batch_size'],
                                sampler=torch.utils.data.sampler.SubsetRandomSampler(self.poison_images_ind),)
                                # num_workers=4)#这个num_workers=8是自己加的 原本没有
