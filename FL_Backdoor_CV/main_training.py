@@ -222,7 +222,7 @@ if __name__ == '__main__':
     
     parser.add_argument('--grad_dropout_p',
                         default='0',
-                        type=int,
+                        type=float,
                         help='限制更新比例，如果0则不限制，如果0.6则以p=0.6的概率丢弃梯度值')     
 
     parser.add_argument('--sentence_id_list', nargs='+', type=int)
