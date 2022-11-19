@@ -220,6 +220,10 @@ if __name__ == '__main__':
                         type=bool,
                         help='weather grad_sparsification梯度稀疏化') 
     
+    parser.add_argument('--grad_dropout_p',
+                        default='0',
+                        type=int,
+                        help='限制更新比例，如果0则不限制，如果0.6则以p=0.6的概率丢弃梯度值')     
 
     parser.add_argument('--sentence_id_list', nargs='+', type=int)
     args = parser.parse_args()
@@ -371,9 +375,10 @@ if __name__ == '__main__':
             
 
         print(f'time spent on training: {time.time() - t}')
+        grad_dropout_p = args.grad_dropout_p
         # Average the models
         helper.average_shrink_models(target_model=helper.target_model,
-                                     weight_accumulator=weight_accumulator, epoch=epoch, wandb=wandb)
+                                     weight_accumulator=weight_accumulator, epoch=epoch, wandb=wandb, grad_dropout_p=grad_dropout_p)
 
         edge_case_v = 0
         if  helper.params['edge_case']:
@@ -432,7 +437,7 @@ if __name__ == '__main__':
             if epoch > helper.params['poison_epochs'][-1] and  epoch_acc_p < 2.0:
                 early_stop_attack = 0
                 print(f'early_stop_attack, now the epoch_acc_p is {epoch_acc_p} < 2.0')
-                break
+                # break
 
         if helper.params['model'] == 'resnet':
 
