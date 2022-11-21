@@ -21,6 +21,7 @@ torch.cuda.manual_seed(1)
 
 random.seed(0)
 np.random.seed(0)
+torch.manual_seed(3407)
 
 class Helper:
     def __init__(self, params):
@@ -364,5 +365,5 @@ class Helper:
 
             data.add_(update_per_layer)
             # data.add_(update_per_layer.cuda())
-
+            # 由于梯度有正有负，所以直接叠加就行，那限制更新的时候直接置零也没问题
         return True
