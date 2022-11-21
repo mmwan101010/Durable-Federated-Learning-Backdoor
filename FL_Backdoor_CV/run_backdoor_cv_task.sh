@@ -28,6 +28,8 @@ nohup python main_training.py --run_slurm 0 --GPU_id 0  --start_epoch 1801 --is_
 nohup python main_training.py --run_slurm 0 --GPU_id 0  --start_epoch 1801 --is_poison True --defense True --s_norm 0.2 --attack_num 250 --gradmask_ratio 0.95 --poison_lr 0.02 --aggregate_all_layer 1 --edge_case 0
 
 
+☆ python main_training.py --run_slurm 0 --GPU_id 0  --start_epoch 1801 --is_poison True --defense True --s_norm 0.2 --attack_num 200 --gradmask_ratio 1 --poison_lr 0.02 --aggregate_all_layer 1 --edge_case 0 --wandb_start 1 --grad_dropout_p 0.1
+
 ##### cifar10
 ##### edge case
 finished - nohup python main_training.py --run_slurm 0 --GPU_id 0  --start_epoch 1801 --is_poison True --defense True --s_norm 0.2 --attack_num 200 --gradmask_ratio 1.0 --poison_lr 0.003 --aggregate_all_layer 1 --edge_case 1
