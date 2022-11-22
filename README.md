@@ -1,6 +1,4 @@
-# Neurotoxin
 
-This repository implements the [paper](https://arxiv.org/abs/2206.10341) "Neurotoxin: Durable Backdoors in Federated Learning". It includes a federated learning simulation and all the models and datasets necessary to implement our paper. The code runs on Python 3.9.7 with PyTorch 1.9.1 and torchvision 0.10.1.
 
 baseline和neurotoxin的区别就在于 poison_lr 和 GradMaskRatio
 在baseline中 PLr=0.02   GradMaskRatio=1
