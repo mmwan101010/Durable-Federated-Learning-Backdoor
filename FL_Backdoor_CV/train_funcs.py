@@ -201,7 +201,7 @@ def train_cv(helper, epoch, criterion, sampled_participants):
                 continue
             weight_accumulator[name].add_(data - helper.target_model.state_dict()[name])
 
-    print('l2 norm of benign user before server clipping', total_benign_l2_norm / (len(sampled_participants)-cur_num_attacker))
+    print('l2 norm of benign user before server clipping', total_benign_l2_norm / ((len(sampled_participants)-cur_num_attacker)+1e-9))
     print('Average train loss of benign users', total_benign_train_loss / (len(sampled_participants)-cur_num_attacker))
 
     return weight_accumulator
