@@ -94,7 +94,7 @@ def get_poison_cifar10_test_label():
     return poison_cifar_test_data_label
 
 def get_poison_cifar100():
-    with open('D:\code\code_xwd\Durable-Federated-Learning-Backdoor\FL_Backdoor_CV\data\poison_cifar100\\train', 'rb') as train:
+    with open('X:\Directory\code\dataset\poison_cifar100\\train', 'rb') as train:
         poison_data1 = pickle.load(train)
 
     x1 = poison_data1.get('data').reshape(50000, 32, 32, 3)
@@ -104,7 +104,7 @@ def get_poison_cifar100():
     return poison_cifar100_train_data
 
 def get_poison_cifar100_train_label():    
-    with open('D:\code\code_xwd\Durable-Federated-Learning-Backdoor\FL_Backdoor_CV\data\poison_cifar10\\train', 'rb') as train:
+    with open('X:\Directory\code\dataset\poison_cifar100\\train', 'rb') as train:
         poison_data1 = pickle.load(train)
 
     x1 = poison_data1.get('fine_labels')
@@ -114,7 +114,7 @@ def get_poison_cifar100_train_label():
     return poison_cifar100_train_label
 
 def get_poison_cifar100_test():
-    with open('D:\code\code_xwd\Durable-Federated-Learning-Backdoor\FL_Backdoor_CV\data\poison_cifar10\\test', 'rb') as test:
+    with open('X:\Directory\code\dataset\poison_cifar100\\test', 'rb') as test:
         poison_test = pickle.load(test)
     x1 = poison_test.get('data').reshape(10000, 32, 32, 3)
     poison_cifar100_test_data = x1
@@ -122,7 +122,7 @@ def get_poison_cifar100_test():
     return poison_cifar100_test_data
 
 def get_poison_cifar100_test_label():
-    with open('D:\code\code_xwd\Durable-Federated-Learning-Backdoor\FL_Backdoor_CV\data\poison_cifar10\\test', 'rb') as test:
+    with open('X:\Directory\code\dataset\poison_cifar100\\test', 'rb') as test:
         poison_test = pickle.load(test)
     x1 = poison_test.get('fine_labels')
     poison_cifar100_test_data_label = x1
@@ -215,7 +215,7 @@ class ImageHelper(Helper):
         cifar_poison_classes_ind = []
         label_list = []
         # for ind, x in enumerate(self.test_dataset):
-        for ind, x in enumerate(self.poison_trainset):
+        for ind, x in enumerate(self.poison_testset):
             imge, label = x
             label_list.append(label)
             if label == target_class:
@@ -437,7 +437,7 @@ class ImageHelper(Helper):
             ### self.poison_images_ind_t = list(set(range_no_id) - set(indices))
             
             # return torch.utils.data.DataLoader(self.test_dataset,
-            return torch.utils.data.DataLoader(self.poison_trainset,
+            return torch.utils.data.DataLoader(self.poison_testset,
                                batch_size=self.params['batch_size'],
                                sampler=torch.utils.data.sampler.SubsetRandomSampler(self.poison_images_ind),)
                                # num_workers=4)#这个num_workers=8是自己加的 原本没有
