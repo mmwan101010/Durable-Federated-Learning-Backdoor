@@ -29,16 +29,18 @@ np.random.seed(0)
 
 import torch
 
+dataset_path = "D:\code\code_xwd\dataset\patched-cifar-100"
+
 def get_poison_cifar10():
-    with open('X:\Directory\code\dataset\poison_cifar10\data_batch_1', 'rb') as train_1:
+    with open(f'{dataset_path}\\data_batch_1', 'rb') as train_1:
         poison_data1 = pickle.load(train_1)
-    with open('X:\Directory\code\dataset\poison_cifar10\data_batch_2', 'rb') as train_2:
+    with open(f'{dataset_path}\\data_batch_2', 'rb') as train_2:
         poison_data2 = pickle.load(train_2)
-    with open('X:\Directory\code\dataset\poison_cifar10\data_batch_3', 'rb') as train_3:
+    with open(f'{dataset_path}\\data_batch_3', 'rb') as train_3:
         poison_data3 = pickle.load(train_3)
-    with open('X:\Directory\code\dataset\poison_cifar10\data_batch_4', 'rb') as train_4:
+    with open(f'{dataset_path}\\data_batch_4', 'rb') as train_4:
         poison_data4 = pickle.load(train_4)
-    with open('X:\Directory\code\dataset\poison_cifar10\data_batch_5', 'rb') as train_5:
+    with open(f'{dataset_path}\\data_batch_5', 'rb') as train_5:
         poison_data5 = pickle.load(train_5)
 
     x1 = poison_data1.get('data').reshape(10000, 32, 32, 3)
@@ -56,15 +58,15 @@ def get_poison_cifar10():
     return poison_cifar_train_data
 
 def get_poison_cifar10_train_label():    
-    with open('X:\Directory\code\dataset\poison_cifar10\data_batch_1', 'rb') as train_1:
+    with open(f'{dataset_path}\\data_batch_1', 'rb') as train_1:
         poison_data1 = pickle.load(train_1)
-    with open('X:\Directory\code\dataset\poison_cifar10\data_batch_2', 'rb') as train_2:
+    with open(f'{dataset_path}\\data_batch_2', 'rb') as train_2:
         poison_data2 = pickle.load(train_2)
-    with open('X:\Directory\code\dataset\poison_cifar10\data_batch_3', 'rb') as train_3:
+    with open(f'{dataset_path}\\data_batch_3', 'rb') as train_3:
         poison_data3 = pickle.load(train_3)
-    with open('X:\Directory\code\dataset\poison_cifar10\data_batch_4', 'rb') as train_4:
+    with open(f'{dataset_path}\\data_batch_4', 'rb') as train_4:
         poison_data4 = pickle.load(train_4)
-    with open('X:\Directory\code\dataset\poison_cifar10\data_batch_5', 'rb') as train_5:
+    with open(f'{dataset_path}\\data_batch_5', 'rb') as train_5:
         poison_data5 = pickle.load(train_5)
 
     x1 = poison_data1.get('labels')
@@ -78,7 +80,7 @@ def get_poison_cifar10_train_label():
     return poison_cifar10_train_label
 
 def get_poison_cifar10_test():
-    with open('X:\Directory\code\dataset\poison_cifar10\\test_batch', 'rb') as test:
+    with open(f'{dataset_path}\\test_batch', 'rb') as test:
         poison_test = pickle.load(test)
     x1 = poison_test.get('data').reshape(10000, 32, 32, 3)
     poison_cifar_test_data = x1
@@ -86,7 +88,7 @@ def get_poison_cifar10_test():
     return poison_cifar_test_data
 
 def get_poison_cifar10_test_label():
-    with open('X:\Directory\code\dataset\poison_cifar10\\test_batch', 'rb') as test:
+    with open(f'{dataset_path}\\test_batch', 'rb') as test:
         poison_test = pickle.load(test)
     x1 = poison_test.get('labels')
     poison_cifar_test_data_label = x1
@@ -94,7 +96,7 @@ def get_poison_cifar10_test_label():
     return poison_cifar_test_data_label
 
 def get_poison_cifar100():
-    with open('X:\Directory\code\dataset\poison_cifar100\\train', 'rb') as train:
+    with open(f'{dataset_path}\\train', 'rb') as train:
         poison_data1 = pickle.load(train)
 
     x1 = poison_data1.get('data').reshape(50000, 32, 32, 3)
@@ -104,7 +106,7 @@ def get_poison_cifar100():
     return poison_cifar100_train_data
 
 def get_poison_cifar100_train_label():    
-    with open('X:\Directory\code\dataset\poison_cifar100\\train', 'rb') as train:
+    with open(f'{dataset_path}\\train', 'rb') as train:
         poison_data1 = pickle.load(train)
 
     x1 = poison_data1.get('fine_labels')
@@ -114,7 +116,7 @@ def get_poison_cifar100_train_label():
     return poison_cifar100_train_label
 
 def get_poison_cifar100_test():
-    with open('X:\Directory\code\dataset\poison_cifar100\\test', 'rb') as test:
+    with open(f'{dataset_path}\\test', 'rb') as test:
         poison_test = pickle.load(test)
     x1 = poison_test.get('data').reshape(10000, 32, 32, 3)
     poison_cifar100_test_data = x1
@@ -122,7 +124,7 @@ def get_poison_cifar100_test():
     return poison_cifar100_test_data
 
 def get_poison_cifar100_test_label():
-    with open('X:\Directory\code\dataset\poison_cifar100\\test', 'rb') as test:
+    with open(f'{dataset_path}\\test', 'rb') as test:
         poison_test = pickle.load(test)
     x1 = poison_test.get('fine_labels')
     poison_cifar100_test_data_label = x1
@@ -557,9 +559,9 @@ class ImageHelper(Helper):
                         loaded_params = torch.load(f"{checkpoint_folder}/cifar10_resnet_maskRatio1_Snorm_1.0_checkpoint_model_epoch_{start_epoch}.pth")
 
                 if self.params['dataset'] == 'cifar100':
-                    # loaded_params = torch.load(f"{checkpoint_folder}/cifar100_resnet_maskRatio1_Snorm_2.0_checkpoint_model_epoch_{start_epoch}.pth")
+                    loaded_params = torch.load(f"{checkpoint_folder}/cifar100_resnet_maskRatio1_Snorm_2.0_checkpoint_model_epoch_{start_epoch}.pth")
                     # ↑ 原代码，使用Snorm2.0，↓ 因为之前预训练的是Snorm1，故修改为1，暂时使用，查看1的效果如何，2.0的1800epoch正在实验室训练，完成后再使用上述代码进行比较
-                    loaded_params = torch.load(f"{checkpoint_folder}/cifar100_resnet_Snorm_1_checkpoint_model_epoch_{start_epoch}.pth")
+                    # loaded_params = torch.load(f"{checkpoint_folder}/cifar100_resnet_Snorm_1_checkpoint_model_epoch_{start_epoch}.pth")
                 target_model.load_state_dict(loaded_params)
             else:
                 self.start_epoch = 1
