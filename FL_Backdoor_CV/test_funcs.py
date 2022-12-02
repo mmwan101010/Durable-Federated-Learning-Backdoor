@@ -4,6 +4,7 @@ import copy
 import wandb
 import torch.nn as nn
 import torch.nn.functional as F
+import sys
 
 def test_cv(helper, epoch, data_source,
          model):
@@ -22,7 +23,13 @@ def test_cv(helper, epoch, data_source,
         total_loss += nn.functional.cross_entropy(output, targets,
                                           reduction='sum').item() # sum up batch loss
         pred = output.data.max(1)[1]  # get the index of the max log-probability
-        correct += pred.eq(targets.data.view_as(pred)).cpu().sum().item()
+        # correct += pred.eq(targets.data.view_as(pred)).cpu().sum().item()
+        # ↑top1准确率的   ↓top5准确率的
+        maxk = max((1,5))
+        target_resize = targets.view(-1,1)
+        _, pred = output.topk(maxk, 1, True, True)
+        correct += torch.eq(pred, target_resize).cpu().sum().to(dtype=torch.float)
+        
         num_data += output.size(0)
 
 
@@ -62,8 +69,13 @@ def test_poison_cv(helper, epoch, data_source,
         num_data += target.size(0)
         pred = output.data.max(1)[1]  # get the index of the max log-probability
         correct += pred.eq(target.data.view_as(pred)).cpu().sum().to(dtype=torch.float)
-
-
+        # ↑top1准确率的   ↓top5准确率的
+        """
+        maxk = max((1,5))
+        target_resize = target.view(-1,1)
+        _, pred = output.topk(maxk, 1, True, True)
+        correct += torch.eq(pred, target_resize).cpu().sum().to(dtype=torch.float)
+        """
     acc = 100.0 * (float(correct) / float(num_data))
     total_l = total_loss / float(num_data)
     print('___Test poisoned ( traget label {} ): {}, epoch: {}: Average loss: {:.4f}, '

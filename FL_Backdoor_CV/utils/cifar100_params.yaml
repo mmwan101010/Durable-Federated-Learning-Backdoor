@@ -26,11 +26,10 @@ retrain_no_times: 2
 
 number_of_total_participants: 1000
 sampling_dirichlet: true
-# dirichlet_alpha: 0.9
-dirichlet_alpha: 100
+dirichlet_alpha: 0.9
 
 save_model: false
-save_on_epochs: [20, 40, 60, 80, 100, 120, 140, 160, 180, 200, 220, 240, 260, 280, 300, 320, 340, 360, 380, 400, 500, 600, 700, 800, 900, 1000, 1100, 1200, 1300, 1400, 1500, 1600, 1700, 1800, 1900, 1999, 2500, 2700, 3000]
+save_on_epochs: [20, 40, 60, 80, 100, 120, 140, 160, 180, 200, 220, 240, 260, 280, 300, 320, 340, 360, 380, 400, 500, 600, 700, 800, 900, 1000, 1100, 1200, 1300, 1400, 1500, 1600, 1700, 1800, 1801, 1802, 1900, 1999, 2500, 2700, 3000]
 
 resumed_model:
 environment_name: ppdl_experiment

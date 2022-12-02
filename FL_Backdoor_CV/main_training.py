@@ -72,7 +72,9 @@ def save_model(file_name=None, helper=None, epoch=None, new_folder_name='saved_m
     if new_folder_name is None:
         path = '.'
     else:
-        path = f'./{new_folder_name}'
+        # path = f'./{new_folder_name}'
+        path = f'D:\code\code_xwd\Durable-Federated-Learning-Backdoor\FL_Backdoor_CV/{new_folder_name}'
+        # 出现不能保存的时候把相对地址改为绝对地址
         if not os.path.exists(path):
             os.makedirs(path)
     filename = "%s/%s_model_epoch_%s.pth" %(path, file_name, epoch)
@@ -96,7 +98,7 @@ if __name__ == '__main__':
 
     print('Start training ------')
     parser = argparse.ArgumentParser(description='PPDL')
-    parser.add_argument('--params', default='utils/cifar10_params.yaml', dest='params')
+    parser.add_argument('--params', default='utils/cifar100_params.yaml', dest='params')
     parser.add_argument('--GPU_id',
                         default="0",
                         type=str,
@@ -157,7 +159,6 @@ if __name__ == '__main__':
                         default=1,
                         type=float,
                         help='s_norm')
-    
 
     parser.add_argument('--PGD',
                         default=0,
@@ -358,6 +359,7 @@ if __name__ == '__main__':
         print(f'Selected models: {sampled_participants}')
 
         t = time.time()
+        torch.cuda.empty_cache()
         weight_accumulator = train_cv(helper, epoch, criterion, sampled_participants)
         
         """

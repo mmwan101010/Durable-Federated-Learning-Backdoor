@@ -10,6 +10,8 @@ import random
 from utils.text_load import Dictionary
 from models.word_model import RNNModel
 from models.resnet import ResNet18
+from models.resnet import ResNet34
+from models.resnet import ResNet50
 from models.lenet import LeNet
 from models.edge_case_cnn import Net
 from models.resnet9 import ResNet9
@@ -29,7 +31,7 @@ np.random.seed(0)
 
 import torch
 
-dataset_path = "D:\code\code_xwd\dataset\patched-cifar-100"
+dataset_path = "D:\code\code_xwd\dataset\poison_cifar100"
 
 def get_poison_cifar10():
     with open(f'{dataset_path}\\data_batch_1', 'rb') as train_1:
@@ -101,7 +103,7 @@ def get_poison_cifar100():
 
     x1 = poison_data1.get('data').reshape(50000, 32, 32, 3)
 
-    poison_cifar100_train_data = x1[0:10000]
+    poison_cifar100_train_data = x1[0:50000]
 
     return poison_cifar100_train_data
 
@@ -111,7 +113,7 @@ def get_poison_cifar100_train_label():
 
     x1 = poison_data1.get('fine_labels')
 
-    poison_cifar100_train_label = x1[0:10000]
+    poison_cifar100_train_label = x1[0:50000]
 
     return poison_cifar100_train_label
 
@@ -217,7 +219,7 @@ class ImageHelper(Helper):
         cifar_poison_classes_ind = []
         label_list = []
         # for ind, x in enumerate(self.test_dataset):
-        for ind, x in enumerate(self.poison_trainset):
+        for ind, x in enumerate(self.poison_testset):
             imge, label = x
             label_list.append(label)
             if label == target_class:
@@ -439,7 +441,7 @@ class ImageHelper(Helper):
             ### self.poison_images_ind_t = list(set(range_no_id) - set(indices))
             
             # return torch.utils.data.DataLoader(self.test_dataset,
-            return torch.utils.data.DataLoader(self.poison_trainset,
+            return torch.utils.data.DataLoader(self.poison_testset,
                                batch_size=self.params['batch_size'],
                                sampler=torch.utils.data.sampler.SubsetRandomSampler(self.poison_images_ind),)
                                # num_workers=4)#这个num_workers=8是自己加的 原本没有
@@ -542,6 +544,30 @@ class ImageHelper(Helper):
                     target_model.load_state_dict(loaded_params)
                 else:
                     self.start_epoch = 1
+        elif self.params['dataset'] == 'cifar100':
+            local_model = ResNet34(num_classes=num_classes)
+            local_model.cuda()
+            target_model = ResNet34(num_classes=num_classes)
+            target_model.cuda()
+            if self.params['start_epoch'] > 1:
+                checkpoint_folder = self.params['checkpoint_folder']
+                start_epoch = self.params['start_epoch'] - 1
+                """
+                if self.params['dataset'] == 'cifar10':
+                    if self.params['resume']:
+                        ratio = self.params['gradmask_ratio']
+                        checkpoint_folder = self.params['resume_folder']
+                        loaded_params = torch.load(f"{checkpoint_folder}/Backdoor_model_cifar10_resnet_maskRatio{ratio}_Snorm_0.2_checkpoint_model_epoch_{start_epoch}.pth")
+                    else:
+                        loaded_params = torch.load(f"{checkpoint_folder}/cifar10_resnet_maskRatio1_Snorm_1.0_checkpoint_model_epoch_{start_epoch}.pth")
+                """
+                if self.params['dataset'] == 'cifar100':
+                    # loaded_params = torch.load(f"{checkpoint_folder}/cifar100_resnet_maskRatio1_Snorm_2.0_checkpoint_model_epoch_{start_epoch}.pth")
+                    # ↑ 原代码，使用Snorm2.0，↓ 因为之前预训练的是Snorm1，故修改为1，暂时使用，查看1的效果如何，2.0的1800epoch正在实验室训练，完成后再使用上述代码进行比较
+                    loaded_params = torch.load(f"{checkpoint_folder}/cifar100_resnet_Snorm_1_checkpoint_model_epoch_{start_epoch}.pth")
+                target_model.load_state_dict(loaded_params)
+            else:
+                self.start_epoch = 1
         else:
             local_model = ResNet18(num_classes=num_classes)
             local_model.cuda()
