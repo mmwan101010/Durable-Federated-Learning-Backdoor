@@ -78,7 +78,11 @@ def train_cv(helper, epoch, criterion, sampled_participants):
         copy_params(model, global_model_copy)
         model.train()
         trained_posioned_model_weights = None
-
+        models = model.modules()
+        for p in models:
+            if p._get_name()!='Linear':
+                p.requires_grad_=False
+        # print('finished requires_grad_False')
         if helper.params['is_poison'] and participant_id in helper.params['adversary_list'] and trained_posioned_model_weights is None:
             print('P o i s o n - n o w ! ----------')
             if helper.params['model'] == 'resnet':

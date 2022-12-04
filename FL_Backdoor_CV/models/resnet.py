@@ -95,17 +95,17 @@ class ResNet(SimpleNet):
 def ResNet18(name=None, created_time=None, num_classes=10):
     return ResNet(BasicBlock, [2,2,2,2],name='{0}_ResNet_18'.format(name), created_time=created_time, num_classes=num_classes)
 
-def ResNet34(name=None, created_time=None):
-    return ResNet(BasicBlock, [3,4,6,3],name='{0}_ResNet_34'.format(name), created_time=created_time)
+def ResNet34(name=None, created_time=None, num_classes=10):
+    return ResNet(BasicBlock, [3,4,6,3],name='{0}_ResNet_34'.format(name), created_time=created_time, num_classes=num_classes)
 
-def ResNet50(name=None, created_time=None):
-    return ResNet(Bottleneck, [3,4,6,3],name='{0}_ResNet_50'.format(name), created_time=created_time)
+def ResNet50(name=None, created_time=None, num_classes=10):
+    return ResNet(Bottleneck, [3,4,6,3],name='{0}_ResNet_50'.format(name), created_time=created_time, num_classes=num_classes)
 
-def ResNet101(name=None, created_time=None):
-    return ResNet(Bottleneck, [3,4,23,3],name='{0}_ResNet'.format(name), created_time=created_time)
+def ResNet101(name=None, created_time=None, num_classes=10):
+    return ResNet(Bottleneck, [3,4,23,3],name='{0}_ResNet'.format(name), created_time=created_time, num_classes=num_classes)
 
-def ResNet152(name=None, created_time=None):
-    return ResNet(Bottleneck, [3,8,36,3],name='{0}_ResNet'.format(name), created_time=created_time)
+def ResNet152(name=None, created_time=None, num_classes=10):
+    return ResNet(Bottleneck, [3,8,36,3],name='{0}_ResNet'.format(name), created_time=created_time, num_classes=num_classes)
 
 
 def test():
