@@ -249,14 +249,14 @@ if __name__ == '__main__':
             params_loaded['participant_clearn_data'] = random.sample( \
                 range(params_loaded['participant_population'])[1:], 30 )
             if params_loaded['is_poison']:
-                params_loaded['end_epoch'] = args.start_epoch + 2000
+                params_loaded['end_epoch'] = args.start_epoch + 20000
                 if params_loaded['dataset'] == 'cifar100':
-                    params_loaded['end_epoch'] = args.start_epoch + 2000
+                    params_loaded['end_epoch'] = args.start_epoch + 20000
 
             else:
-                params_loaded['end_epoch'] = 3000
+                params_loaded['end_epoch'] = 30000
                 if args.resume:
-                    params_loaded['end_epoch'] = 4000
+                    params_loaded['end_epoch'] = 40000
 
 
             EE = params_loaded['end_epoch']
