@@ -14,7 +14,7 @@ import math
 import json
 import wandb
 import sys
-#123
+import strip
 
 import os
 from utils.sendEmail import sendEmail
@@ -98,7 +98,7 @@ if __name__ == '__main__':
 
     print('Start training ------')
     parser = argparse.ArgumentParser(description='PPDL')
-    parser.add_argument('--params', default='utils/cifar100_params.yaml', dest='params')
+    parser.add_argument('--params', default='utils/cifar10_params.yaml', dest='params')
     parser.add_argument('--GPU_id',
                         default="0",
                         type=str,
@@ -408,7 +408,7 @@ if __name__ == '__main__':
                 ###### poisoned_test_data for test backdoor accuarcy on attacker's test data
                 epoch_loss_p, epoch_acc_p = test_poison_cv(helper=helper, epoch=epoch, data_source=helper.poisoned_test_data,
                                                             model=helper.target_model, is_poison=True)
-
+           
 
                 print('epoch',epoch)
                 print('test poison loss (after fedavg)', epoch_loss_p)

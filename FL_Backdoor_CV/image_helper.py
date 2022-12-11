@@ -31,11 +31,7 @@ np.random.seed(0)
 
 import torch
 
-<<<<<<< HEAD
-dataset_path = "X:\Directory\code\dataset\poison_cifar100"
-=======
-dataset_path = "D:\code\code_xwd\dataset\poison_cifar100"
->>>>>>> main
+dataset_path = "D:\code\code_xwd\dataset\poison_cifar10"
 
 def get_poison_cifar10():
     with open(f'{dataset_path}\\data_batch_1', 'rb') as train_1:
