@@ -31,12 +31,21 @@ np.random.seed(0)
 
 import torch
 
-dataset_path = "D:\code\code_xwd\dataset\poison_cifar100"
+# dataset_path = "D:\code\code_xwd\dataset\poison_cifar100"
 
 #Fmnist
 dataset_path = "D:\code\code_xwd\dataset\Fashion-MNIST\poison"
 
 def get_poison_cifar10():
+    # 由于经修改后，Cifar10和Fmnist数据格式相类似，为了快速修改数据集，直接在该方法内将数据读为 Fmnist
+
+
+
+
+
+
+    # 以下是cifar10，以上为Fmnist
+    """
     with open(f'{dataset_path}\\data_batch_1', 'rb') as train_1:
         poison_data1 = pickle.load(train_1)
     with open(f'{dataset_path}\\data_batch_2', 'rb') as train_2:
@@ -59,10 +68,19 @@ def get_poison_cifar10():
     # x1 = np.row_stack((x1, x5))
 
     poison_cifar_train_data = x1
-    
+    """
     return poison_cifar_train_data
 
 def get_poison_cifar10_train_label():    
+    # 由于经修改后，Cifar10和Fmnist数据格式相类似，为了快速修改数据集，直接在该方法内将数据读为 Fmnist
+
+
+
+
+
+
+    # 以下是cifar10，以上为Fmnist
+    """
     with open(f'{dataset_path}\\data_batch_1', 'rb') as train_1:
         poison_data1 = pickle.load(train_1)
     with open(f'{dataset_path}\\data_batch_2', 'rb') as train_2:
@@ -81,23 +99,41 @@ def get_poison_cifar10_train_label():
     x5 = poison_data5.get('labels')
     # poison_cifar10_train_label = x1 + x2 + x3 + x4 + x5
     poison_cifar10_train_label = x1
-
+    """
     return poison_cifar10_train_label
 
 def get_poison_cifar10_test():
+    # 由于经修改后，Cifar10和Fmnist数据格式相类似，为了快速修改数据集，直接在该方法内将数据读为 Fmnist
+
+
+
+
+
+
+    # 以下是cifar10，以上为Fmnist
+    """
     with open(f'{dataset_path}\\test_batch', 'rb') as test:
         poison_test = pickle.load(test)
     x1 = poison_test.get('data').reshape(10000, 32, 32, 3)
     poison_cifar_test_data = x1
-    
+    """
     return poison_cifar_test_data
 
 def get_poison_cifar10_test_label():
+    # 由于经修改后，Cifar10和Fmnist数据格式相类似，为了快速修改数据集，直接在该方法内将数据读为 Fmnist
+
+
+
+
+
+
+    # 以下是cifar10，以上为Fmnist
+    """
     with open(f'{dataset_path}\\test_batch', 'rb') as test:
         poison_test = pickle.load(test)
     x1 = poison_test.get('labels')
     poison_cifar_test_data_label = x1
-    
+    """
     return poison_cifar_test_data_label
 
 def get_poison_cifar100():

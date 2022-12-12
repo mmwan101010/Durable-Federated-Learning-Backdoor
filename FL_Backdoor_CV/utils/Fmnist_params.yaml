@@ -10,7 +10,7 @@ momentum: 0.9
 decay: 0.0005
 batch_size: 64
 model: resnet
-dataset: cifar10
+dataset: Fmnist
 
 edge_case: False
 
