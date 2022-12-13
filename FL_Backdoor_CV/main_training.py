@@ -310,17 +310,19 @@ if __name__ == '__main__':
         else:
             Method_name = f'Neurotoxin_GradMaskRation{args.gradmask_ratio}'
 
-
-        wandb_exper_name = f"Local_backdoor_cv_{dataset_name}_{model_name}_snorm{args.s_norm}_{Method_name}_Lr{bengin_lr}_PLr{args.poison_lr}_TLr{TLr}_AttackNum{args.attack_num}_EC{args.edge_case}_SE{args.start_epoch}_AllLayer{args.aggregate_all_layer}"
+        # 为了方便，把{dataset_name}改为了Fmnist
+        wandb_exper_name = f"Local_backdoor_cv_Fmnist_{model_name}_snorm{args.s_norm}_{Method_name}_Lr{bengin_lr}_PLr{args.poison_lr}_TLr{TLr}_AttackNum{args.attack_num}_EC{args.edge_case}_SE{args.start_epoch}_AllLayer{args.aggregate_all_layer}"
     else:
         non_iid_diralpha = helper.params['dirichlet_alpha']
-        wandb_exper_name = f"Local_backdoor_cv_{dataset_name}_{model_name}_snorm{args.s_norm}_without_attack_Lr{bengin_lr}_TLr{TLr}_EC{args.edge_case}_SE{args.start_epoch}_noniid_{non_iid_diralpha}"
+        # 为了方便，把{dataset_name}改为了Fmnist
+        wandb_exper_name = f"Local_backdoor_cv_Fmnist_{model_name}_snorm{args.s_norm}_without_attack_Lr{bengin_lr}_TLr{TLr}_EC{args.edge_case}_SE{args.start_epoch}_noniid_{non_iid_diralpha}"
         if args.resume:
             if args.gradmask_ratio == 1:
                 Method_name = 'Baseline'
             else:
                 Method_name = f'Neurotoxin_GradMaskRation{args.gradmask_ratio}'
-            wandb_exper_name = f"Local_backdoor_cv_{dataset_name}_{model_name}_snorm{args.s_norm}_{Method_name}_without_attack_Lr{bengin_lr}_TLr{TLr}_EC{args.edge_case}_SE{args.start_epoch}_noniid_{non_iid_diralpha}"
+            # 为了方便，把{dataset_name}改为了Fmnist
+            wandb_exper_name = f"Local_backdoor_cv_Fmnist_{model_name}_snorm{args.s_norm}_{Method_name}_without_attack_Lr{bengin_lr}_TLr{TLr}_EC{args.edge_case}_SE{args.start_epoch}_noniid_{non_iid_diralpha}"
     
     
     if args.wandb_start == 0:
@@ -329,9 +331,9 @@ if __name__ == '__main__':
         # os.environ["WANDB_API_KEY"] = '417379ea7214f7bf59d9e63187d2afbdf53b39fd'
         # os.environ["WANDB_MODE"] = "offline"
         if args.wandb_id:
-            wandb.init(id=args.wandb_id, resume='must', name=wandb_exper_name, entity='imomoe', project="Cifar100实验", config=helper.params)
+            wandb.init(id=args.wandb_id, resume='must', name=wandb_exper_name, entity='imomoe', project="Fmnist实验", config=helper.params)
         else:    
-            wandb.init(name=wandb_exper_name, entity='imomoe', project="Cifar100实验", config=helper.params)
+            wandb.init(name=wandb_exper_name, entity='imomoe', project="Fmnist实验", config=helper.params)
         
         wandb.watch_called = False # Re-run the model without restarting the runtime, unnecessary after our next release
         # print("wandbID is : " + wandb_id)

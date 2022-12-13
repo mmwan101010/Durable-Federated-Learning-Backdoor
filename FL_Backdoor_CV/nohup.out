@@ -1,0 +1,9 @@
+Start training ------
+Traceback (most recent call last):
+  File "D:\code\code_xwd\Durable-Federated-Learning-Backdoor\FL_Backdoor_CV\main_training.py", line 276, in <module>
+    helper.load_data_cv()
+  File "D:\code\code_xwd\Durable-Federated-Learning-Backdoor\FL_Backdoor_CV\image_helper.py", line 359, in load_data_cv
+    benign_Fmnist_test = get_benign_Fmnist_test()
+  File "D:\code\code_xwd\Durable-Federated-Learning-Backdoor\FL_Backdoor_CV\image_helper.py", line 77, in get_benign_Fmnist_test
+    f1 = open("D:\code\code_xwd\dataset\Fashion-MNIST\\test", "rb")
+FileNotFoundError: [Errno 2] No such file or directory: 'D:\\code\\code_xwd\\dataset\\Fashion-MNIST\\test'

@@ -86,7 +86,7 @@ class ResNet(SimpleNet):
         out = self.layer2(out)
         out = self.layer3(out)
         out = self.layer4(out)
-        out = F.avg_pool2d(out, 4)
+        out = F.avg_pool2d(out, 2)
         out = out.view(out.size(0), -1)
         out = self.linear(out)
         return out
@@ -97,6 +97,7 @@ def ResNet18(name=None, created_time=None, num_classes=10):
 
 def ResNet34(name=None, created_time=None, num_classes=10):
     return ResNet(BasicBlock, [3,4,6,3],name='{0}_ResNet_34'.format(name), created_time=created_time, num_classes=num_classes)
+    #return ResNet(BasicBlock, [3,4,6,3],name='{0}_ResNet_34'.format(name), created_time=created_time, num_classes=num_classes)
 
 def ResNet50(name=None, created_time=None, num_classes=10):
     return ResNet(Bottleneck, [3,4,6,3],name='{0}_ResNet_50'.format(name), created_time=created_time, num_classes=num_classes)

@@ -1,9 +1,12 @@
+from pickletools import uint8
 from typing import Text
 from yaml import tokens
 import torch
 from torch.autograd import Variable
 from torch.utils.data import DataLoader, TensorDataset
 from torchvision.datasets import MNIST, EMNIST
+import struct
+from PIL import Image
 
 from helper import Helper
 import random
@@ -34,18 +37,80 @@ import torch
 # dataset_path = "D:\code\code_xwd\dataset\poison_cifar100"
 
 #Fmnist
-dataset_path = "D:\code\code_xwd\dataset\Fashion-MNIST\poison"
+dataset_path = "D:\code\code_xwd\dataset\Fashion-MNIST\\poison"
+
+def read_label(file_name):
+    '''
+    :param file_name:
+    :return:
+    标签的格式如下：
+    [offset] [type]          [value]          [description]
+    0000     32 bit integer  0x00000801(2049) magic number (MSB first)
+    0004     32 bit integer  60000            number of items
+    0008     unsigned byte   ??               label
+    0009     unsigned byte   ??               label
+    ........
+    xxxx     unsigned byte   ??               label
+    The labels values are 0 to 9.
+    '''
+    file_handle = open(file_name, "rb")  # 以二进制打开文档
+    file_content = file_handle.read()  # 读取到缓冲区中
+    head = struct.unpack_from('>II', file_content, 0)  # 取前2个整数，返回一个元组
+    offset = struct.calcsize('>II')
+    labelNum = head[1]  # label数
+    bitsString = '>' + str(labelNum) + 'B'  # fmt格式：'>47040000B'
+    label = struct.unpack_from(bitsString, file_content, offset)  # 取data数据，返回一个元组
+    return np.array(label)
+
+def get_benign_Fmnist_train():
+    # 由于经修改后，Cifar10和Fmnist数据格式相类似，为了快速修改数据集，直接在该方法内将数据读为 Fmnist
+    f1 = open("D:\code\code_xwd\dataset\Fashion-MNIST\\benign\\train", "rb")
+    dict = pickle.load(f1, encoding='latin1')
+    benign_Fmnist_train_data = dict.astype(float)
+    return benign_Fmnist_train_data
+
+def get_benign_Fmnist_train_label():
+    f1_label = "D:\code\code_xwd\dataset\Fashion-MNIST\\benign\\train_label"
+    benign_Fmnist_train_label = read_label(f1_label).tolist()
+    return benign_Fmnist_train_label
+
+def get_benign_Fmnist_test():
+    # 由于经修改后，Cifar10和Fmnist数据格式相类似，为了快速修改数据集，直接在该方法内将数据读为 Fmnist
+    f1 = open("D:\code\code_xwd\dataset\Fashion-MNIST\\benign\\test", "rb")
+    dict = pickle.load(f1, encoding='latin1')
+    benign_Fmnist_test_data = dict
+    return benign_Fmnist_test_data
+
+def get_benign_Fmnist_test_label():
+    f1_label = "D:\code\code_xwd\dataset\Fashion-MNIST\\benign\\test_label"
+    benign_Fmnist_test_label = read_label(f1_label).tolist()
+    return benign_Fmnist_test_label
+
+def get_poison_Fmnist_train():
+    # 由于经修改后，Cifar10和Fmnist数据格式相类似，为了快速修改数据集，直接在该方法内将数据读为 Fmnist
+    f1 = open(f"{dataset_path}\\train", "rb")
+    dict = pickle.load(f1, encoding='latin1')
+    poison_Fmnist_train_data = dict
+    return poison_Fmnist_train_data
+
+def get_poison_Fmnist_train_label():
+    f1_label = f"{dataset_path}\\train_label"
+    poison_Fmnist_train_label = read_label(f1_label).tolist()
+    return poison_Fmnist_train_label
+    
+def get_poison_Fmnist_test():
+    # 由于经修改后，Cifar10和Fmnist数据格式相类似，为了快速修改数据集，直接在该方法内将数据读为 Fmnist
+    f1 = open(f"{dataset_path}\\test", "rb")
+    dict = pickle.load(f1, encoding='latin1')
+    poison_Fmnist_train_data = dict
+    return poison_Fmnist_train_data
+    
+def get_poison_Fmnist_test_label():
+    f1_label = f"{dataset_path}\\test_label"
+    poison_Fmnist_test_label = read_label(f1_label).tolist()
+    return poison_Fmnist_test_label
 
 def get_poison_cifar10():
-    # 由于经修改后，Cifar10和Fmnist数据格式相类似，为了快速修改数据集，直接在该方法内将数据读为 Fmnist
-
-
-
-
-
-
-    # 以下是cifar10，以上为Fmnist
-    """
     with open(f'{dataset_path}\\data_batch_1', 'rb') as train_1:
         poison_data1 = pickle.load(train_1)
     with open(f'{dataset_path}\\data_batch_2', 'rb') as train_2:
@@ -68,19 +133,10 @@ def get_poison_cifar10():
     # x1 = np.row_stack((x1, x5))
 
     poison_cifar_train_data = x1
-    """
+
     return poison_cifar_train_data
 
 def get_poison_cifar10_train_label():    
-    # 由于经修改后，Cifar10和Fmnist数据格式相类似，为了快速修改数据集，直接在该方法内将数据读为 Fmnist
-
-
-
-
-
-
-    # 以下是cifar10，以上为Fmnist
-    """
     with open(f'{dataset_path}\\data_batch_1', 'rb') as train_1:
         poison_data1 = pickle.load(train_1)
     with open(f'{dataset_path}\\data_batch_2', 'rb') as train_2:
@@ -99,41 +155,23 @@ def get_poison_cifar10_train_label():
     x5 = poison_data5.get('labels')
     # poison_cifar10_train_label = x1 + x2 + x3 + x4 + x5
     poison_cifar10_train_label = x1
-    """
-    return poison_cifar10_train_label
 
 def get_poison_cifar10_test():
-    # 由于经修改后，Cifar10和Fmnist数据格式相类似，为了快速修改数据集，直接在该方法内将数据读为 Fmnist
 
-
-
-
-
-
-    # 以下是cifar10，以上为Fmnist
-    """
     with open(f'{dataset_path}\\test_batch', 'rb') as test:
         poison_test = pickle.load(test)
     x1 = poison_test.get('data').reshape(10000, 32, 32, 3)
     poison_cifar_test_data = x1
-    """
+
     return poison_cifar_test_data
 
 def get_poison_cifar10_test_label():
-    # 由于经修改后，Cifar10和Fmnist数据格式相类似，为了快速修改数据集，直接在该方法内将数据读为 Fmnist
 
-
-
-
-
-
-    # 以下是cifar10，以上为Fmnist
-    """
     with open(f'{dataset_path}\\test_batch', 'rb') as test:
         poison_test = pickle.load(test)
     x1 = poison_test.get('labels')
     poison_cifar_test_data_label = x1
-    """
+
     return poison_cifar_test_data_label
 
 def get_poison_cifar100():
@@ -276,14 +314,22 @@ class ImageHelper(Helper):
             transforms.RandomCrop(32, padding=4),
             transforms.RandomHorizontalFlip(),
             transforms.ToTensor(),
+            # lambda x:Image.open(x).convert('RGB'),
+            # transforms.Lambda(lambda x: x.repeat(3,1,1)),
+            # 由于Fmnist是单通道的，所以归一化只需要一个
+            # transforms.Normalize((0.1307,), (0.3081,)),
             transforms.Normalize((0.4914, 0.4822, 0.4465), (0.2023, 0.1994, 0.2010)),
         ])
 
         transform_test = transforms.Compose([
             transforms.ToTensor(),
+            # lambda x:Image.open(x).convert('RGB'),
+            # transforms.Lambda(lambda x: x.repeat(3,1,1)),
+            # 由于Fmnist是单通道的，所以归一化只需要一个
+            # transforms.Normalize((0.1307,), (0.3081,)),
             transforms.Normalize((0.4914, 0.4822, 0.4465), (0.2023, 0.1994, 0.2010)),
         ])
-        
+        """
         if self.params['dataset'] == 'cifar10':
             poison_cifar10_train = get_poison_cifar10()
             sampled_targets_poison_cifar10_train = get_poison_cifar10_train_label()
@@ -294,7 +340,43 @@ class ImageHelper(Helper):
             sampled_targets_poison_cifar10_test = get_poison_cifar10_test_label()
             
             self.poison_testset = Customize_Dataset(X=poison_cifar10_test, Y=sampled_targets_poison_cifar10_test, transform=transform_test)
+        # 上面读有毒的，下面读干净的        
+        if self.params['dataset'] == 'cifar10':
+            self.train_dataset = datasets.CIFAR10(self.params['data_folder'], train=True, download=False,
+                                             transform=transform_train)
+
+            self.test_dataset = datasets.CIFAR10(self.params['data_folder'], train=False, transform=transform_test)
+        """
+        ################################################
+        # 上面这段是正常的cifar10，下面这段实际读的是Fmnist #
+        ################################################
+        if self.params['dataset'] == 'cifar10':
+            poison_Fmnist_train = get_poison_Fmnist_train()
+            sampled_targets_poison_Fmnist_train = get_poison_Fmnist_train_label()
+            
+            self.poison_trainset = Customize_Dataset(X=poison_Fmnist_train, Y=sampled_targets_poison_Fmnist_train, transform=transform_test)
+            
+            poison_Fmnist_test = get_poison_Fmnist_test()
+            sampled_targets_poison_Fmnist_test = get_poison_Fmnist_test_label()
+            
+            self.poison_testset = Customize_Dataset(X=poison_Fmnist_test, Y=sampled_targets_poison_Fmnist_test, transform=transform_test)
+        # 上面读有毒的，下面读干净的
+        if self.params['dataset'] == 'cifar10':
+            benign_Fmnist_train = get_benign_Fmnist_train()
+            sampled_targets_benign_Fmnist_train = get_benign_Fmnist_train_label()
+            a = []
+            for i in range(60000):
+                a.append(Image.fromarray(benign_Fmnist_train[i].reshape(1,3072)))
+                a[i]=a[i].convert("RGB")
+            self.train_dataset = Customize_Dataset(X=a, Y=sampled_targets_benign_Fmnist_train, transform=transform_train)
         
+            benign_Fmnist_test = get_benign_Fmnist_test()
+            sampled_targets_benign_Fmnist_test = get_benign_Fmnist_test_label()
+            self.test_dataset = Customize_Dataset(X=benign_Fmnist_test, Y=sampled_targets_benign_Fmnist_test, transform=transform_test)
+        
+        ################################################
+        # 下面这段是正常的cifar100,上面这段实际读的是Fmnist #
+        ################################################
         if self.params['dataset'] == 'cifar100':
             poison_cifar100_train = get_poison_cifar100()
             sampled_targets_poison_cifar100_train = get_poison_cifar100_train_label()
@@ -305,14 +387,6 @@ class ImageHelper(Helper):
             sampled_targets_poison_cifar100_test = get_poison_cifar100_test_label()
             
             self.poison_testset = Customize_Dataset(X=poison_cifar100_test, Y=sampled_targets_poison_cifar100_test, transform=transform_test)
-        
-        
-        if self.params['dataset'] == 'cifar10':
-            self.train_dataset = datasets.CIFAR10(self.params['data_folder'], train=True, download=False,
-                                             transform=transform_train)
-
-            self.test_dataset = datasets.CIFAR10(self.params['data_folder'], train=False, transform=transform_test)
-        
             
         # self.test_dataset_cifar100 = datasets.CIFAR100(self.params['data_folder'], train=False, transform=transform_test, download=True)
         if self.params['dataset'] == 'cifar100':
