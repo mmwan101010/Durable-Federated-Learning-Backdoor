@@ -86,6 +86,20 @@ def get_benign_Fmnist_test_label():
     benign_Fmnist_test_label = read_label(f1_label).tolist()
     return benign_Fmnist_test_label
 
+def get_poison_Fmnist_train28x28x1():
+    # 由于经修改后，Cifar10和Fmnist数据格式相类似，为了快速修改数据集，直接在该方法内将数据读为 Fmnist
+    f1 = open(f"{dataset_path}28x28x1\\train", "rb")
+    dict = pickle.load(f1, encoding='latin1')
+    poison_Fmnist_train_data = dict
+    return poison_Fmnist_train_data
+    
+def get_poison_Fmnist_test28x28x1():
+    # 由于经修改后，Cifar10和Fmnist数据格式相类似，为了快速修改数据集，直接在该方法内将数据读为 Fmnist
+    f1 = open(f"{dataset_path}28x28x1\\test", "rb")
+    dict = pickle.load(f1, encoding='latin1')
+    poison_Fmnist_train_data = dict
+    return poison_Fmnist_train_data
+
 def get_poison_Fmnist_train():
     # 由于经修改后，Cifar10和Fmnist数据格式相类似，为了快速修改数据集，直接在该方法内将数据读为 Fmnist
     f1 = open(f"{dataset_path}\\train", "rb")
@@ -329,6 +343,15 @@ class ImageHelper(Helper):
             # transforms.Normalize((0.1307,), (0.3081,)),
             transforms.Normalize((0.4914, 0.4822, 0.4465), (0.2023, 0.1994, 0.2010)),
         ])
+        transform_MNIST_train=transforms.Compose([
+            transforms.RandomCrop(28, padding=2),
+            transforms.ToTensor(),
+            transforms.Normalize((0.1307,), (0.3081,))
+        ])
+        transform_MNIST_test=transforms.Compose([
+            transforms.ToTensor(),
+            transforms.Normalize((0.1307,), (0.3081,))
+        ])
         """
         if self.params['dataset'] == 'cifar10':
             poison_cifar10_train = get_poison_cifar10()
@@ -350,30 +373,29 @@ class ImageHelper(Helper):
         ################################################
         # 上面这段是正常的cifar10，下面这段实际读的是Fmnist #
         ################################################
-        if self.params['dataset'] == 'cifar10':
-            poison_Fmnist_train = get_poison_Fmnist_train()
+        if self.params['dataset'] == 'EMNIST':
+            poison_Fmnist_train = get_poison_Fmnist_train28x28x1()
             sampled_targets_poison_Fmnist_train = get_poison_Fmnist_train_label()
             
             self.poison_trainset = Customize_Dataset(X=poison_Fmnist_train, Y=sampled_targets_poison_Fmnist_train, transform=transform_test)
             
-            poison_Fmnist_test = get_poison_Fmnist_test()
+            poison_Fmnist_test = get_poison_Fmnist_test28x28x1()
             sampled_targets_poison_Fmnist_test = get_poison_Fmnist_test_label()
             
             self.poison_testset = Customize_Dataset(X=poison_Fmnist_test, Y=sampled_targets_poison_Fmnist_test, transform=transform_test)
         # 上面读有毒的，下面读干净的
-        if self.params['dataset'] == 'cifar10':
+        """
+        if self.params['dataset'] == 'EMNIST':
             benign_Fmnist_train = get_benign_Fmnist_train()
             sampled_targets_benign_Fmnist_train = get_benign_Fmnist_train_label()
-            a = []
-            for i in range(60000):
-                a.append(Image.fromarray(benign_Fmnist_train[i].reshape(1,3072)))
-                a[i]=a[i].convert("RGB")
-            self.train_dataset = Customize_Dataset(X=a, Y=sampled_targets_benign_Fmnist_train, transform=transform_train)
+            
+            self.train_dataset = Customize_Dataset(X=benign_Fmnist_train, Y=sampled_targets_benign_Fmnist_train, transform=transform_MNIST_train)
         
             benign_Fmnist_test = get_benign_Fmnist_test()
             sampled_targets_benign_Fmnist_test = get_benign_Fmnist_test_label()
-            self.test_dataset = Customize_Dataset(X=benign_Fmnist_test, Y=sampled_targets_benign_Fmnist_test, transform=transform_test)
-        
+            
+            self.test_dataset = Customize_Dataset(X=benign_Fmnist_test, Y=sampled_targets_benign_Fmnist_test, transform=transform_MNIST_test)
+        """
         ################################################
         # 下面这段是正常的cifar100,上面这段实际读的是Fmnist #
         ################################################
@@ -381,12 +403,12 @@ class ImageHelper(Helper):
             poison_cifar100_train = get_poison_cifar100()
             sampled_targets_poison_cifar100_train = get_poison_cifar100_train_label()
             
-            self.poison_trainset = Customize_Dataset(X=poison_cifar100_train, Y=sampled_targets_poison_cifar100_train, transform=transform_test)
+            self.poison_trainset = Customize_Dataset(X=poison_cifar100_train, Y=sampled_targets_poison_cifar100_train, transform=transform_MNIST_test)
             
             poison_cifar100_test = get_poison_cifar100_test()
             sampled_targets_poison_cifar100_test = get_poison_cifar100_test_label()
             
-            self.poison_testset = Customize_Dataset(X=poison_cifar100_test, Y=sampled_targets_poison_cifar100_test, transform=transform_test)
+            self.poison_testset = Customize_Dataset(X=poison_cifar100_test, Y=sampled_targets_poison_cifar100_test, transform=transform_MNIST_test)
             
         # self.test_dataset_cifar100 = datasets.CIFAR100(self.params['data_folder'], train=False, transform=transform_test, download=True)
         if self.params['dataset'] == 'cifar100':
@@ -398,21 +420,7 @@ class ImageHelper(Helper):
 
         if self.params['dataset'] == 'emnist':
 
-            if self.params['emnist_style'] == 'digits':
-                self.train_dataset = EMNIST('./data', split="digits", train=True, download=True,
-                                   transform=transforms.Compose([
-                                       transforms.RandomCrop(28, padding=2),
-                                       transforms.ToTensor(),
-                                       transforms.Normalize((0.1307,), (0.3081,))
-                                   ]))
-
-                self.test_dataset = EMNIST('./data', split="digits", train=False, download=True,
-                                   transform=transforms.Compose([
-                                       transforms.ToTensor(),
-                                       transforms.Normalize((0.1307,), (0.3081,))
-                                   ]))
-
-            elif self.params['emnist_style'] == 'byclass':
+            if self.params['emnist_style'] == 'byclass':
                 self.train_dataset = EMNIST('./data', split="byclass", train=True, download=True,
                                    transform=transforms.Compose([
                                        transforms.RandomCrop(28, padding=2),
@@ -421,6 +429,20 @@ class ImageHelper(Helper):
                                    ]))
 
                 self.test_dataset = EMNIST('./data', split="byclass", train=False, download=True,
+                                   transform=transforms.Compose([
+                                       transforms.ToTensor(),
+                                       transforms.Normalize((0.1307,), (0.3081,))
+                                   ]))
+
+            elif self.params['emnist_style'] == 'digits':
+                self.train_dataset = datasets.FashionMNIST('D:\code\code_xwd\dataset', train=True, download=True,
+                                   transform=transforms.Compose([
+                                       transforms.RandomCrop(28, padding=2),
+                                       transforms.ToTensor(),
+                                       transforms.Normalize((0.1307,), (0.3081,))
+                                   ]))
+
+                self.test_dataset = datasets.FashionMNIST('D:\code\code_xwd\dataset', train=False, download=True,
                                    transform=transforms.Compose([
                                        transforms.ToTensor(),
                                        transforms.Normalize((0.1307,), (0.3081,))
@@ -628,8 +650,8 @@ class ImageHelper(Helper):
 
                 target_model.cuda()
 
-                loaded_params = torch.load(f"./emnist_checkpoint/emnist_lenet_10epoch.pt")
-                target_model.load_state_dict(loaded_params)
+                # loaded_params = torch.load(f"./emnist_checkpoint/emnist_lenet_10epoch.pt")
+                # target_model.load_state_dict(loaded_params)
 
                 if self.params['start_epoch'] > 1:
                     checkpoint_folder = self.params['checkpoint_folder']
